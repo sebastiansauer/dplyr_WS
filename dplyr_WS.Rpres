@@ -1,3 +1,39 @@
+
+<style>
+.footer {
+    color: black;
+    background: #E8E8E8;
+    position: fixed;
+    top: 90%;
+    text-align:center;
+    width:100%;
+}
+.midcenter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+.small-code pre code {
+  font-size: 1em;
+}
+
+.reveal h3 {
+  word-wrap: normal;
+  -moz-hyphens: none;
+}
+.reveal h1 {
+  word-wrap: normal;
+  -moz-hyphens: none;
+}
+</style>
+
+
+
+
+
+
+
+
 Große Daten analysieren mit dplyr
 ========================================================
 author: Sebastian Sauer
@@ -5,6 +41,8 @@ date: 30. Juni 2016
 width: 1400
 height: 900
 transition: rotate
+
+
 
 Welches Werkzeug?
 ========================================================
@@ -20,6 +58,13 @@ library(ggplot2)
 suppressMessages(library(dplyr))
 suppressMessages(library(gridExtra))
 library(nycflights13)
+suppressPackageStartupMessages(library(pander))
+suppressMessages(library(ggvis))
+suppressMessages(library(rCharts))
+library(rCharts)
+
+#library(plotly)
+# library(XML)
 
 opts_template$set(myfig1 = list(fig.height = 9, fig.width = 16))
 
@@ -38,7 +83,8 @@ p1 <- ggplot(diamonds, aes(x = carat, y = price, color = carat)) +
   facet_wrap(~cut, nrow = 1) +
   geom_point() +
   geom_smooth(method = "lm") +
-  ylim(c(0, 20000))
+  ylim(c(0, 20000)) +
+  coord_flip()
 
 d_sum <-
   diamonds %>%
@@ -65,16 +111,19 @@ grid.arrange(p1, p2, nrow = 1)
 
 
 
+
+
+
+
 Anatomie der Datenanalyse
 ========================================================
 
 - Zeilen filtern
 - Spalten wählen
-- Gruppieren
+- Sortieren
 - Zusammenfassen
 - Verändern
-- Sortieren
-
+- Gruppieren
 
 
 Anatomie der Datenanalyse (Englisch)
@@ -82,11 +131,10 @@ Anatomie der Datenanalyse (Englisch)
 
 - Zeilen filtern -- **`filter`**
 - Spalten wählen -- **`select`**
-- Gruppieren -- **`group_by`**
+- Sortieren -- **`arrange`**
 - Zusammenfassen -- **`summarise`**
 - Verändern -- **`mutate`**
-- Sortieren -- **`arrange`**
-
+- Gruppieren -- **`group_by`**
 
 
 R setup
@@ -115,17 +163,411 @@ glimpse(flights)
 
 
 
-Eine einfache Tabelle (data.frame)
+Zeilen filtern mit filter()
 ======================
 
-```{r simple_df}
-df <- data_frame(
-  sex = c("male", "male", "female", "female", "mf"),
-  name = c("Anton", "Bert", "Carla", "Dora", "Schnirp")
-)
-kable(df, caption = "df")
+<div class="footer" style="font-size:120%;">
+filter(mtcars, cyl == 8)<br>
+</div>
+
+
+Auszug aus `mtcars`
+```{r}
+mt_head <- head(mtcars[c("mpg", "cyl", "hp", "wt")], 10)
+knitr::kable(mt_head)
 ```
 
+***
+Spalten gefiltert:
+```{r mtcars_filtered}
+dplyr::filter(mt_head, cyl == 8) %>% kable
+```
+
+
+Beispiele für filter()
+==============
+
+Entschlüsseln Sie diese Filter:
+
+```{r filter_demo, eval = FALSE, echo = TRUE}
+filter(mtcars, hp > 100)
+filter(mtcars, cyl %in% c(4, 6))
+filter(mtcars, gear == 3 | gear == 4)
+filter(mtcars, hp > 300 & cyl == 8)
+```
+
+
+Übung zu filter()
+=================
+
+Identifizieren Sie folgende Flüge:
+
+1. von JFK nach PWM (Portland)
+2. von JFK nach PWM (Portland) im Januar
+3. von JFK nach PWM (Portland) im Januar mit mehr als einer Stunde Verspätung
+3. von JFK nach PWM (Portland) im Januar zwischen Mitternach und 5 Uhr
+4. von JFK deren Ankunftsverspätung doppelt so groß war wie die Abflugverspätung, und die nach Atlanta geflogen sind
+
+
+Lösungsideen
+============
+```{r filter_solutions, echo = TRUE, eval = FALSE}
+
+filter(flights, origin == "JFK")
+
+filter(flights, origin == "JFK" & month == 1)
+
+filter(flights, origin == "JFK" & month == 1 & dep_time < 500 & dest == "PWM" )
+
+filter(flights, origin == "JFK" & month == 1 & dep_time > 500 & dest == "PWM" )
+
+filter(flights, origin == "JFK" & arr_delay > 2 * dep_delay & month == 1, dest == "ATL")
+
+
+```
+
+
+
+Spalten wählen mit select()
+================
+
+<div class="footer" style="font-size:120%;">
+select(mtcars, mpg, cyl, hp)<br>
+</div>
+
+
+Auszug aus `mtcars`
+```{r mtcars_select}
+head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
+```
+
+***
+Spalten gefiltert:
+```{r}
+head(mtcars) %>% select(mpg, cyl, hp) %>% kable
+```
+
+
+Übung zu select
+==============
+
+Lesen Sie die Hilfe zu `select`. Auf welche Arten kann man noch Spalten (Variablen auswählen?)
+
+Schreiben Sie 3 Arten auf, um die Spalten mit den Verzögerungen auszuwählen.
+
+
+Lösungsideen
+============
+
+```{r eval = FALSE, echo = TRUE}
+select(flights, arr_delay, dep_delay)
+select(flights, arr_delay:dep_delay)
+select(flights, contains("delay"))
+select(flights, ends_with("delay"))
+select(flights, c(6, 9))
+auswahl <- c("dep_delay", "arr_delay")
+select(flights, one_of(auswahl))
+```
+
+
+
+Zeilen sortieren mit arrange()
+=============
+
+
+<div class="footer" style="font-size:120%;">
+arrange(mtcars, cyl)<br>
+</div>
+
+
+Auszug aus `mtcars`
+```{r}
+head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
+```
+
+***
+Zeilen *aufsteigend* sortiert nach `cyl` und nach `hp`:
+```{r}
+head(mtcars) %>% select(mpg, cyl, hp) %>%  arrange(cyl, hp) %>% kable
+```
+
+
+
+
+Zeilen absteigend sortieren mit arrange(desc())
+=============
+
+
+<div class="footer" style="font-size:120%;">
+select(mtcars, arrange(desc(cyl)))<br>
+</div>
+
+
+Auszug aus `mtcars`
+```{r}
+head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
+```
+
+***
+Zeilen *absteigend* sortiert nach `cyl`:
+```{r}
+head(mtcars) %>% select(mpg, cyl, hp) %>%
+  arrange(desc(cyl)) %>% kable
+```
+
+
+
+Übung zu arrange()
+==================
+
+1. Ordnen Sie die Flüge nach Datum und Uhrzeit.
+2. Welche Flüge hatten die größte Verspätung?
+4. Welche Flüge holten die meiste Verspätung während des Fluges auf?
+
+3. Welche Airlines hatten die größte Verspätung? Hm.
+
+
+Lösungsideen
+===========
+
+
+```{r, echo = TRUE, eval = FALSE}
+arrange(flights, month, day, sched_dep_time)
+flights2 <- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
+arrange(flights2, desc(dep_delay))
+arrange(flights2, desc(dep_delay - arr_delay))
+```
+
+
+Variablen (und ihre Werte) verändern
+================
+<div class="footer" style="font-size:120%;">
+mutate(flights, wt_kg = wt / 1000 * 2, wt_per_ps = wt_kg / hp)
+<br>
+</div>
+
+
+Auszug aus `mtcars`
+```{r}
+head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
+```
+
+***
+Neue Spalte: Gewicht (`wt`) pro PS (`hp`)
+```{r}
+head(mtcars) %>%
+  select(wt, mpg, cyl, hp) %>%
+  mutate(wt_kg = wt*1000/2, wt_per_ps = wt_kg / hp) %>%
+  kable
+```
+
+
+
+Übung zu mutate()
+================
+
+
+1. Berechnen Sie die Geschwindigkeit (mph) jedes Fluges. Welche Flüge flogen am schnellsten?
+2. Erzeugen Sie eine neue Variable, die angibt, wieviel Zeit ein Flug verloren oder aufgeholt hat.
+3. Berechnen Sie die Flugdistanz in km.
+
+
+Lösungsideen
+==============
+
+```{r, echo = TRUE, eval = FALSE}
+mutate(flights, speed = distance / air_time)
+arrange(flights, speed)
+mutate(flights, delay = dep_delay - arr_delay)
+mutate(flights, dist_km = distance / 1.6)
+```
+
+
+Zusammenfassen mit summarise()
+==========
+
+<div class="footer" style="font-size:120%;">
+summarise(flights, hp_mean = mean(hp))
+<br>
+</div>
+
+
+```{r}
+head(mtcars)  %>% select(mpg, cyl, hp, disp) %>% kable
+```
+
+***
+Zusammenfassung der Spalte `hp` in einen einzigen Wert (Auszug)
+```{r}
+head(mtcars) %>%
+  summarise(hp_mean = mean(hp, na.rm = TRUE)) %>% kable
+```
+
+
+Gruppieren und zusammenfassen mit summarise()
+==========
+
+<div class="footer" style="font-size:120%;">
+mtcars_by_cyl = group_by(mtcars, cyl)
+summarise(mtcars_by_cyl, hp_cyl_mean = mean(hp))
+<br>
+</div>
+
+
+Gruppieren nach `cyl` (und in einem data.frame ausgeben):
+```{r}
+head(mtcars)  %>% select(mpg, cyl, hp, disp) %>% kable
+```
+
+***
+Zusammenfassen der Spalte `hp` *bei jeder Gruppe* in einen einzigen Wert
+```{r}
+head(mtcars) %>%
+  group_by(cyl) %>%
+  summarise(hp_cyl_mean = mean(hp, na.rm = TRUE)) %>% kable
+```
+
+
+Zusammenfassungsfunktionen
+=========================
+
+- `min()`, `max()`, `median()`, `quantile()`
+- `mean()`, `sd()`, `sum()`
+- `n()`, `n_distinct()`
+- Jede Funktion, die eine Spalte als Input nimmt und einen einzelnen Wert ausgibt
+
+
+Übung zu summarise() nach group_by()
+===========
+1. Berechnen Sie die mittlere Verspätung pro Flughafen!
+2. Ermitteln Sie pro Monat den Flug mit der größten Verspätung!
+3. Geben Sie die Airlines mit der geringsten mittleren Verspätung an!
+
+
+
+Lösungsideen
+============
+1 Berechnen Sie die mittlere Verspätung pro Flughafen!
+```{r, echo = TRUE, eval = FALSE}
+f2 <-  group_by(flights, origin)
+f3 <- mutate(f2, delay = dep_delay - arr_delay)
+summarise(f3, delay_mean = mean(delay, na.rm = TRUE))
+```
+
+2 Ermitteln Sie pro Monat den Flug mit der größten Verspätung!
+```{r, echo = TRUE, eval = FALSE}
+f2 <- group_by(flights, month)
+f3 <- mutate(f2, delay = dep_delay - arr_delay)
+summarise(f3, delay_max = max(delay, na.rm = T))
+```
+
+3 Geben Sie die Airlines mit der geringsten mittleren Verspätung an!
+```{r, echo = TRUE, eval = FALSE}
+f2 <- group_by(flights, carrier)
+f3 <- mutate(f2, delay = dep_delay - arr_delay)
+f4 <- filter(f3, !is.na(delay))
+f5 <- summarise(f4, delay_min = mean(delay))
+arrange(f5, delay_min)
+```
+
+
+Verschachtelte Syntax ist schwer zu lesen
+==============
+```{r, echo = TRUE, eval = FALSE}
+hourly_delay <- filter(
+  summarise(
+    group_by(
+      filter(
+flights,
+        !is.na(dep_delay)
+      ),
+date, hour ),
+    delay = mean(dep_delay),
+n = n() ),
+n > 10 )
+```
+
+
+Die Pfeife %>%
+==============
+
+- Das ist keine Pfeife `{magrittr}`
+- x %>% f(y) -> f(x, y)
+
+```{r, echo = TRUE, eval = FALSE}
+hourly_delay <- flights %>%
+  filter(!is.na(dep_delay)) %>%
+  group_by(date, hour) %>%
+  summarise(delay = mean(dep_delay), n = n()) %>%
+  filter(n > 10)
+```
+
+- Tipp: `%>%` kann man lesen als "*und dann*"
+
+
+Übung zur Pfeife
+================
+
+4. Was sind die oberen 10% der Airlines bei der Verspätung?
+5. Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
+
+
+Lösungsideen
+============
+ Was sind die oberen 10% der Airlines bei der Verspätung?
+```{r, echo = TRUE, eval = FALSE}
+flights %>%
+  group_by(carrier) %>%
+  na.omit() %>%
+  mutate(delay = dep_delay - arr_delay) %>%
+  summarise(delay_mean = mean(delay, na.rm = TRUE)) %>%
+  filter(delay_mean < quantile(delay_mean, .1)) %>%
+  # oder: filter(ntile(delay_mean, 10) == 1) %>%
+  arrange(delay_mean)
+```
+Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
+```{r echo = TRUE, eval = FALSE}
+flights %>%
+  na.omit() %>%
+  mutate(delay = dep_delay - arr_delay) %>%
+  filter(delay > 60) %>%
+  summarise(delay_mean = mean(delay),
+            n = n()) %>%  # Anzahl
+  arrange(delay_mean)
+```
+
+
+
+Diagramme
+=========
+type:section
+
+
+Hängen Flugzeit und Verspätung zusammen?
+===============
+
+```{r, echo = TRUE, eval = TRUE, out.width = 1400}
+flights %>%
+  mutate(delay = dep_delay - arr_delay) %>%
+  na.omit() %>%
+  qplot(x = distance, y = delay, data = .)
+```
+
+
+Was ist die Top-10 der lahmen Airlines?
+```{r, echo = TRUE, eval = TRUE, out.width = 1400}
+flights %>%
+  group_by(carrier) %>%
+  na.omit() %>%
+  mutate(delay = dep_delay - arr_delay) %>%
+  ungroup() %>%
+  filter(min_rank(delay) < 11) %>%
+  arrange(delay) %>%
+  qplot(data = ., x = reorder(carrier, delay), y = delay,
+        geom = c("point",))
+
+
+```
 
 
 
