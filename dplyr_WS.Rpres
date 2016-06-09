@@ -1,0 +1,129 @@
+Große Daten analysieren mit dplyr
+========================================================
+author: Sebastian Sauer
+date: 30. Juni 2016
+width: 1400
+height: 900
+transition: rotate
+
+Welches Werkzeug?
+========================================================
+
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE, cache = FALSE}
+options(width = 80)
+
+
+library(knitr)
+library(ggplot2)
+suppressMessages(library(dplyr))
+suppressMessages(library(gridExtra))
+library(nycflights13)
+
+opts_template$set(myfig1 = list(fig.height = 9, fig.width = 16))
+
+tools <- read.csv("tools.csv")
+kable(tools)
+```
+
+
+Datenanalyse mit R
+====
+```{r echo = FALSE, message = FALSE, fig.width=9,fig.height=9,dpi=300, fig.out = "1400px"}
+
+
+data(diamonds, package = "ggplot2")
+p1 <- ggplot(diamonds, aes(x = carat, y = price, color = carat)) +
+  facet_wrap(~cut, nrow = 1) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  ylim(c(0, 20000))
+
+d_sum <-
+  diamonds %>%
+  na.omit() %>%
+  select(cut, price, color) %>%
+  group_by(cut) %>%
+  summarise(xintercept = mean(price))
+
+
+p2 <- ggplot(na.omit(diamonds), aes(x = price, color = cut)) +
+  geom_histogram() +
+  facet_wrap(~cut, nrow = 1) +
+  geom_vline(data = d_sum, aes(xintercept = xintercept)) +
+  geom_text(data = d_sum, aes(label = trunc(xintercept), x = xintercept+1000),
+            y = 6000, hjust = 0) +
+  theme(legend.position = "false")
+
+grid.arrange(p1, p2, nrow = 1)
+
+```
+
+
+
+
+
+Anatomie der Datenanalyse
+========================================================
+
+- Zeilen filtern
+- Spalten wählen
+- Gruppieren
+- Zusammenfassen
+- Verändern
+- Sortieren
+
+
+
+Anatomie der Datenanalyse (Englisch)
+========================================================
+
+- Zeilen filtern -- **`filter`**
+- Spalten wählen -- **`select`**
+- Gruppieren -- **`group_by`**
+- Zusammenfassen -- **`summarise`**
+- Verändern -- **`mutate`**
+- Sortieren -- **`arrange`**
+
+
+
+R setup
+======
+
+```{r eval = FALSE}
+library(dplyr)
+library(ggplot2)
+library(nycflights13)
+
+# install.packages(c("dplyr", "ggplot2", "nycflights13"))
+```
+
+<http://www.RStudio.com>
+
+
+
+Daten sichten
+=====
+
+```{r}
+options(width = 120)
+
+data(flights)
+glimpse(flights)
+```
+
+
+
+Zeilen filtern
+======================
+
+```{r}
+df <- data_frame(
+  sex = c("male", "male", "female", "female", "mf"),
+  name = c("Anton", "Bert", "Carla", "Dora", "Schnirp")
+)
+df
+```
+
+
+
+
