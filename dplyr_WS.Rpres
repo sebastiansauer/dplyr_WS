@@ -12,6 +12,8 @@ Welches Werkzeug?
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE, cache = FALSE}
 options(width = 80)
 
+knitr::opts_chunk$set(fig.width=12, fig.height=8,
+                      echo=FALSE, warning=FALSE, message=FALSE)
 
 library(knitr)
 library(ggplot2)
@@ -28,7 +30,7 @@ kable(tools)
 
 Datenanalyse mit R
 ====
-```{r echo = FALSE, message = FALSE, fig.width=9,fig.height=9,dpi=300, fig.out = "1400px"}
+```{r fig_diamonds, out.width = 1400}
 
 
 data(diamonds, package = "ggplot2")
@@ -52,7 +54,8 @@ p2 <- ggplot(na.omit(diamonds), aes(x = price, color = cut)) +
   geom_vline(data = d_sum, aes(xintercept = xintercept)) +
   geom_text(data = d_sum, aes(label = trunc(xintercept), x = xintercept+1000),
             y = 6000, hjust = 0) +
-  theme(legend.position = "false")
+  theme(legend.position = "false") +
+  scale_x_continuous(breaks = c(0, 5000, 1000))
 
 grid.arrange(p1, p2, nrow = 1)
 
@@ -89,7 +92,7 @@ Anatomie der Datenanalyse (Englisch)
 R setup
 ======
 
-```{r eval = FALSE}
+```{r eval = FALSE, echo = TRUE}
 library(dplyr)
 library(ggplot2)
 library(nycflights13)
@@ -104,24 +107,23 @@ library(nycflights13)
 Daten sichten
 =====
 
-```{r}
-options(width = 120)
-
+```{r look_data, echo = c(3)}
+options(width = 60)
 data(flights)
 glimpse(flights)
 ```
 
 
 
-Zeilen filtern
+Eine einfache Tabelle (data.frame)
 ======================
 
-```{r}
+```{r simple_df}
 df <- data_frame(
   sex = c("male", "male", "female", "female", "mf"),
   name = c("Anton", "Bert", "Carla", "Dora", "Schnirp")
 )
-df
+kable(df, caption = "df")
 ```
 
 
