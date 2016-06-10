@@ -1,0 +1,11 @@
+.,Excel,R,SQL
+schon bekannt,X,,
+kleine Daten (<10^5 Zeilen),X,X,
+kleine große Daten (<10 GB),,X,
+große Daten (>10 GB),,,X
+automatisierbar,,X,X
+transparent,,X,X
+moderne Statistik,,X,
+schöne Diagramme,,X,
+Interaktive Applets,,X,
+Open Code,,X,(X)
