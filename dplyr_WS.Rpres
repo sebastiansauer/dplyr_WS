@@ -8,23 +8,7 @@
     text-align:center;
     width:100%;
 }
-.midcenter {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-}
-.small-code pre code {
-  font-size: 1em;
-}
 
-.reveal h3 {
-  word-wrap: normal;
-  -moz-hyphens: none;
-}
-.reveal h1 {
-  word-wrap: normal;
-  -moz-hyphens: none;
-}
 </style>
 
 
@@ -44,11 +28,15 @@ transition: rotate
 
 
 
+
+
+
+
 Welches Werkzeug?
 ========================================================
 
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE, cache = FALSE}
-options(width = 80)
+options(width = 60)
 
 knitr::opts_chunk$set(fig.width=12, fig.height=8,
                       echo=FALSE, warning=FALSE, message=FALSE)
@@ -62,29 +50,32 @@ suppressPackageStartupMessages(library(pander))
 suppressMessages(library(ggvis))
 suppressMessages(library(rCharts))
 library(rCharts)
+suppressPackageStartupMessages(library(googleVis))
+suppressPackageStartupMessages(library(xtable))
 
-#library(plotly)
-# library(XML)
 
 opts_template$set(myfig1 = list(fig.height = 9, fig.width = 16))
 
 tools <- read.csv("tools.csv")
-kable(tools)
+kable(tools, format = "html")
 ```
+
+
+
 
 
 Datenanalyse mit R
 ====
-```{r fig_diamonds, out.width = 1400}
+```{r fig_diamonds, out.width = 1200}
 
 
 data(diamonds, package = "ggplot2")
 p1 <- ggplot(diamonds, aes(x = carat, y = price, color = carat)) +
-  facet_wrap(~cut, nrow = 1) +
-  geom_point() +
+  facet_wrap(~cut, ncol = 1, scales = "free") +
+  geom_point(alpha = .3) +
   geom_smooth(method = "lm") +
-  ylim(c(0, 20000)) +
-  coord_flip()
+  ylim(c(0, 20000))
+
 
 d_sum <-
   diamonds %>%
@@ -94,9 +85,9 @@ d_sum <-
   summarise(xintercept = mean(price))
 
 
-p2 <- ggplot(na.omit(diamonds), aes(x = price, color = cut)) +
+p2 <- ggplot(na.omit(diamonds), aes(x = price, fill = cut, color = cut)) +
   geom_histogram() +
-  facet_wrap(~cut, nrow = 1) +
+  facet_wrap(~cut, ncol = 1, scales = "free") +
   geom_vline(data = d_sum, aes(xintercept = xintercept)) +
   geom_text(data = d_sum, aes(label = trunc(xintercept), x = xintercept+1000),
             y = 6000, hjust = 0) +
@@ -106,10 +97,6 @@ p2 <- ggplot(na.omit(diamonds), aes(x = price, color = cut)) +
 grid.arrange(p1, p2, nrow = 1)
 
 ```
-
-
-
-
 
 
 
@@ -408,7 +395,7 @@ Gruppieren und zusammenfassen mit summarise()
 ==========
 
 <div class="footer" style="font-size:120%;">
-mtcars_by_cyl = group_by(mtcars, cyl)
+mtcars_by_cyl = group_by(mtcars, cyl) <br>
 summarise(mtcars_by_cyl, hp_cyl_mean = mean(hp))
 <br>
 </div>
@@ -447,21 +434,21 @@ Zusammenfassungsfunktionen
 
 Lösungsideen
 ============
-1 Berechnen Sie die mittlere Verspätung pro Flughafen!
+1\. Berechnen Sie die mittlere Verspätung pro Flughafen!
 ```{r, echo = TRUE, eval = FALSE}
 f2 <-  group_by(flights, origin)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 summarise(f3, delay_mean = mean(delay, na.rm = TRUE))
 ```
 
-2 Ermitteln Sie pro Monat den Flug mit der größten Verspätung!
+2\. Ermitteln Sie pro Monat den Flug mit der größten Verspätung!
 ```{r, echo = TRUE, eval = FALSE}
 f2 <- group_by(flights, month)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 summarise(f3, delay_max = max(delay, na.rm = T))
 ```
 
-3 Geben Sie die Airlines mit der geringsten mittleren Verspätung an!
+3\. Geben Sie die Airlines mit der geringsten mittleren Verspätung an!
 ```{r, echo = TRUE, eval = FALSE}
 f2 <- group_by(flights, carrier)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
@@ -492,7 +479,7 @@ Die Pfeife %>%
 ==============
 
 - Das ist keine Pfeife `{magrittr}`
-- x %>% f(y) -> f(x, y)
+- x `%>% f(y) -> f(x, y)
 
 ```{r, echo = TRUE, eval = FALSE}
 hourly_delay <- flights %>%
@@ -546,7 +533,7 @@ type:section
 Hängen Flugzeit und Verspätung zusammen?
 ===============
 
-```{r, echo = TRUE, eval = TRUE, out.width = 1400}
+```{r, echo = TRUE, eval = TRUE, fig.align = "center"}
 flights %>%
   mutate(delay = dep_delay - arr_delay) %>%
   na.omit() %>%
@@ -555,7 +542,9 @@ flights %>%
 
 
 Was ist die Top-10 der lahmen Airlines?
-```{r, echo = TRUE, eval = TRUE, out.width = 1400}
+===================
+
+```{r, echo = TRUE, eval = TRUE, fig.align = "center"}
 flights %>%
   group_by(carrier) %>%
   na.omit() %>%
@@ -564,7 +553,7 @@ flights %>%
   filter(min_rank(delay) < 11) %>%
   arrange(delay) %>%
   qplot(data = ., x = reorder(carrier, delay), y = delay,
-        geom = c("point",))
+        geom = c("point"))
 
 
 ```
