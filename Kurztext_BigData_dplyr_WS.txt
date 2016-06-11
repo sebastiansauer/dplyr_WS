@@ -1,0 +1,16 @@
+Methoden quantitativer Forschung 2
+-- Analyse von Big Data mit "dplyr" ---
+
+
+Dieser Kurs bietet einen Einstieg in die quantitative Analyse (relativ) großer Datenmengen mit R und dem R-Paket "dplyr". Der Schwerpunkt liegt auf praktischen Aspekten der Datenanalyse; statistisch-mathematische Verfahren werden nicht/kaum adressiert. Das Ziel ist es, eine professionelle Alternative zu "Excel" aufzuzeigen.
+
+Damit Sie vom Kurs profitieren, ist es sinnvoll, diese Voraussetzungen zu beachten:
+
+- Bringen Sie einen Laptop mit.
+- Bitte installieren Sie vorher R: https://cran.r-project.org/ 
+- Bitte installierne Sie vorher RStudio (Desktop): https://www.rstudio.com/products/rstudio/download/
+- Folgende R-Packages werden benötigt: dplyr, ggplot2 (jeweils mit dependencies).
+- Grundkenntnisse im Umgang mit R und Statistik werden vorausgesetzt.
+
+
+Das R-Paket "dplyr" ist m.E. eine der innovativsten Methoden, die in den letzten Jahren zur praktischen Datenanalyse entwickelt wurden. Freuen Sie sich auf eine Einführung in eines der modernsten Tools der praktischen Datenanalyse!
