@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Große Daten analysieren mit dplyr</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Große Daten analysieren mit dplyr">
+  <meta name="author" content="Sebastian Sauer">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Große Daten analysieren mit dplyr</h1>
+    <h2>OK, heute nur *kleine* große Daten</h2>
+    <p>Sebastian Sauer<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<h2>Excel oder R oder ...?</h2>
+
+<table><thead>
+<tr>
+<th align="left">.</th>
+<th align="left">Excel</th>
+<th align="left">R</th>
+<th align="left">SQL</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">schon bekannt</td>
+<td align="left">X</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">kleine Daten (&lt;10<sup>5</sup> Zeilen)</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">kleine große Daten (&lt;10 GB)</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">große Daten (&gt;10 GB)</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">automatisierbar</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">transparent</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">moderne Statistik</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">schöne Diagramme</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Interaktive Applets</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Open Code</td>
+<td align="left"></td>
+<td align="left">X</td>
+<td align="left">(X)</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>R: Die neuesten Tools, elegante Diagramme</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Anatomie der Datenanalyse</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfassen:</p>
+
+<ul>
+<li>Zeilen filtern</li>
+<li>Spalten wählen</li>
+<li>Sortieren</li>
+<li>Zusammenfassen</li>
+<li>Verändern</li>
+<li>Gruppieren</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Anatomie der Datenanalyse (Englisch)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Zeilen filtern -- <strong><code>filter</code></strong></li>
+<li>Spalten wählen -- <strong><code>select</code></strong></li>
+<li>Sortieren -- <strong><code>arrange</code></strong></li>
+<li>Zusammenfassen -- <strong><code>summarise</code></strong></li>
+<li>Verändern -- <strong><code>mutate</code></strong></li>
+<li>Gruppieren -- <strong><code>group_by</code></strong></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2><code>dplyr</code> stellt die &quot;Analyse-Verben&quot; zur Verfügung</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Cheatsheet</a></p>
+
+<p><img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="600" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Wir brauchen heute diese R-Pakete sowie RStudio</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># packages müssen einmalig installiert sein, bevor Sie sie laden können
+# update.packages()  # zur Sicherheit auf den neuesten Stand kommen
+# install.packages(c(&quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;nycflights13&quot;))
+
+library(dplyr)
+library(ggplot2)
+library(nycflights13)
+data(flights)  # lädt Datensatz
+</code></pre>
+
+<ul>
+<li><p>Installieren Sie <a href="http://www.RStudio.com">RStudio</a>.</p></li>
+<li><p>Alternativ kann man die Daten auch <a href="https://s3-us-west-2.amazonaws.com/sparkr-data/nycflights13.csv">hier</a> herunterladen.</p></li>
+<li><p>Verfolgen Sie die Analyse auch in Excel mit.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>glimpse(flights)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>## Observations: 336,776
+## Variables: 19
+## $ year           (int) 2013, 2013, 2013, 2013, 2013, 20...
+## $ month          (int) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ day            (int) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ dep_time       (int) 517, 533, 542, 544, 554, 554, 55...
+## $ sched_dep_time (int) 515, 529, 540, 545, 600, 558, 60...
+## $ dep_delay      (dbl) 2, 4, 2, -1, -6, -4, -5, -3, -3,...
+## $ arr_time       (int) 830, 850, 923, 1004, 812, 740, 9...
+## $ sched_arr_time (int) 819, 830, 850, 1022, 837, 728, 8...
+## $ arr_delay      (dbl) 11, 20, 33, -18, -25, 12, 19, -1...
+## $ carrier        (chr) &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;U...
+## $ flight         (int) 1545, 1714, 1141, 725, 461, 1696...
+## $ tailnum        (chr) &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N...
+## $ origin         (chr) &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA...
+## $ dest           (chr) &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL...
+## $ air_time       (dbl) 227, 227, 160, 183, 116, 150, 15...
+## $ distance       (dbl) 1400, 1416, 1089, 1576, 762, 719...
+## $ hour           (dbl) 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6,...
+## $ minute         (dbl) 15, 29, 40, 45, 0, 58, 0, 0, 0, ...
+## $ time_hour      (time) 2013-01-01 05:00:00, 2013-01-01...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Der Datensatz <code>mtcars</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>Ein Datensatz zu technischen Merkmalen von Autos aus der US-Zeitschrift <em>Motor Trends</em>.</p></li>
+<li><p>Der Datensatz ist in R schon enthalten.</p></li>
+</ul>
+
+<p>Sehen Sie sich die Hilfe zu dem Datensatz an:</p>
+
+<pre><code class="r">?mtcars
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Zeilen filtern mit filter()</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>Auszug aus <code>mtcars</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">wt</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">2.620</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">2.875</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">2.320</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">3.215</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">3.440</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">3.460</td>
+</tr>
+<tr>
+<td align="left">Duster 360</td>
+<td align="right">14.3</td>
+<td align="right">8</td>
+<td align="right">245</td>
+<td align="right">3.570</td>
+</tr>
+<tr>
+<td align="left">Merc 240D</td>
+<td align="right">24.4</td>
+<td align="right">4</td>
+<td align="right">62</td>
+<td align="right">3.190</td>
+</tr>
+<tr>
+<td align="left">Merc 230</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">95</td>
+<td align="right">3.150</td>
+</tr>
+<tr>
+<td align="left">Merc 280</td>
+<td align="right">19.2</td>
+<td align="right">6</td>
+<td align="right">123</td>
+<td align="right">3.440</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Spalten gefiltert mit <code>cyl == 8</code>:</p>
+
+<table><thead>
+<tr>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">wt</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">3.44</td>
+</tr>
+<tr>
+<td align="right">14.3</td>
+<td align="right">8</td>
+<td align="right">245</td>
+<td align="right">3.57</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Beispiele für filter()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Entschlüsseln Sie diese Filter (Datensatz <code>flights</code>):</p>
+
+<pre><code class="r">filter(mtcars, hp &gt; 100)
+filter(mtcars, cyl %in% c(4, 6))
+filter(mtcars, gear == 3 | gear == 4)
+filter(mtcars, hp &gt; 300 &amp; cyl == 8)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Übung zu filter()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Identifizieren Sie folgende Flüge:</p>
+
+<ol>
+<li>von JFK nach PWM (Portland)</li>
+<li>von JFK nach PWM (Portland) im Januar</li>
+<li>von JFK nach PWM (Portland) im Januar mit mehr als einer Stunde Verspätung</li>
+<li>von JFK nach PWM (Portland) im Januar zwischen Mitternach und 5 Uhr</li>
+<li>von JFK deren Ankunftsverspätung doppelt so groß war wie die Abflugverspätung, und die nach Atlanta geflogen sind</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">filter(flights, origin == &quot;JFK&quot;)
+
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1)
+
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1 &amp; dep_time &lt; 500 &amp; dest == &quot;PWM&quot; )
+
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1 &amp; dep_time &gt; 500 &amp; dest == &quot;PWM&quot; )
+
+filter(flights, origin == &quot;JFK&quot; &amp; arr_delay &gt; 2 * dep_delay &amp; month == 1, dest == &quot;ATL&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Spalten wählen mit select()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>select(mtcars, mpg, cyl, hp)</code></p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p>Auszug aus <code>mtcars</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Spalten ausgewählt mit <code>select(mtcars, mgp, cyl, hp)</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Übung zu select</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>Lesen Sie die Hilfe zu <code>select()</code>. Auf welche Arten kann man noch Spalten (Variablen) auswählen?</p></li>
+<li><p>Schreiben Sie 3 Arten auf, um die Spalten mit den Verzögerungen auszuwählen.</p></li>
+<li><p>Stellen Sie sich vor, Sie haben einen Datensatz mit 1000 Spalten: V1 .. V1000. Inwiefern ist das mit Excel noch praktibel?</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">select(flights, arr_delay, dep_delay)
+select(flights, arr_delay:dep_delay)
+select(flights, contains(&quot;delay&quot;))
+select(flights, ends_with(&quot;delay&quot;))
+select(flights, c(6, 9))
+auswahl &lt;- c(&quot;dep_delay&quot;, &quot;arr_delay&quot;)
+select(flights, one_of(auswahl))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Zeilen sortieren mit arrange()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>arrange(mtcars, cyl)</code></p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p>Auszug aus <code>mtcars</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Zeilen <em>aufsteigend</em> sortiert nach <code>cyl</code> und nach <code>hp</code>:</p>
+
+<table><thead>
+<tr>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+</tr>
+<tr>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+</tr>
+<tr>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Zeilen absteigend sortieren mit arrange(desc())</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>select(mtcars, arrange(desc(cyl)))</code> (&quot;descending&quot;: engl. für absteigend)</p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p>Auszug aus <code>mtcars</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Zeilen <strong>absteigend</strong> sortiert nach <code>cyl</code>:</p>
+
+<table><thead>
+<tr>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+</tr>
+<tr>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+</tr>
+<tr>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+</tr>
+<tr>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Übung zu arrange()</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Ordnen Sie die Flüge nach Datum und Uhrzeit.</li>
+<li>Welche Flüge hatten die größte Verspätung?</li>
+<li><p>Welche Flüge holten die meiste Verspätung während des Fluges auf?</p></li>
+<li><p>Welche Airlines hatten die größte Verspätung? Hm.</p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">arrange(flights, month, day, sched_dep_time)
+flights2 &lt;- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
+arrange(flights2, desc(dep_delay))
+arrange(flights2, desc(dep_delay - arr_delay))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Variablen (und ihre Werte) verändern</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>mutate(flights, wt_kg = wt / 1000 * 2, wt_per_ps = wt_kg / hp)</code></p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p>Auszug aus <code>mtcars</code>:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Neue Spalte <code>wt_per_ps</code>: Gewicht (<code>wt</code>) pro PS (<code>hp</code>):</p>
+
+<table><thead>
+<tr>
+<th align="right">wt</th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">wt_kg</th>
+<th align="right">wt_per_ps</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">2.620</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">1310.0</td>
+<td align="right">11.909091</td>
+</tr>
+<tr>
+<td align="right">2.875</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">1437.5</td>
+<td align="right">13.068182</td>
+</tr>
+<tr>
+<td align="right">2.320</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">1160.0</td>
+<td align="right">12.473118</td>
+</tr>
+<tr>
+<td align="right">3.215</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">1607.5</td>
+<td align="right">14.613636</td>
+</tr>
+<tr>
+<td align="right">3.440</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">1720.0</td>
+<td align="right">9.828571</td>
+</tr>
+<tr>
+<td align="right">3.460</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">1730.0</td>
+<td align="right">16.476191</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Übung zu mutate()</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Berechnen Sie die Geschwindigkeit (mph) jedes Fluges. Welche Flüge flogen am schnellsten?</li>
+<li>Erzeugen Sie eine neue Variable, die angibt, wieviel Zeit ein Flug verloren oder aufgeholt hat.</li>
+<li>Berechnen Sie die Flugdistanz in km.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">mutate(flights, speed = distance / air_time)
+arrange(flights, speed)
+mutate(flights, delay = dep_delay - arr_delay)
+mutate(flights, dist_km = distance / 1.6)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Zusammenfassen mit summarise()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>summarise(flights, hp_mean = mean(hp))</code></p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Zusammenfassung der Spalte <code>hp</code> in einen einzigen Wert (Mittelwert):</p>
+
+<table><thead>
+<tr>
+<th align="right">hp_mean</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">117.1667</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Gruppieren plus zusammenfassen mit summarise()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>mtcars_by_cyl = group_by(mtcars, cyl)</code></p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p>Gruppieren nach <code>cyl</code> (und in einem data.frame ausgeben):</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">hp</th>
+<th align="right">disp</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+</tr>
+<tr>
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">160</td>
+</tr>
+<tr>
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">93</td>
+<td align="right">108</td>
+</tr>
+<tr>
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">110</td>
+<td align="right">258</td>
+</tr>
+<tr>
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">175</td>
+<td align="right">360</td>
+</tr>
+<tr>
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">105</td>
+<td align="right">225</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Zusammenfassen der Spalte <code>hp</code> <em>bei jeder Gruppe</em> in einen einzigen Wert:</p>
+
+<table><thead>
+<tr>
+<th align="right">cyl</th>
+<th align="right">hp_cyl_mean</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">4</td>
+<td align="right">93.00</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">108.75</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">175.00</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Funktionen zum Zusammenfassen</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>min()</code>, <code>max()</code>, <code>median()</code>, <code>quantile()</code></li>
+<li><code>mean()</code>, <code>sd()</code>, <code>sum()</code></li>
+<li><code>n()</code>, <code>n_distinct()</code></li>
+<li class='..</li>'><li><em>Jede</em> Funktion, die eine <em>Spalte</em> als <em>Input</em> nimmt und einen <em>einzelnen Wert ausgibt</em></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Übung zu summarise() nach group_by()</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Berechnen Sie die mittlere Verspätung pro Flughafen!</li>
+<li>Ermitteln Sie pro Monat den Flug mit der größten Verspätung!</li>
+<li>Geben Sie die Airlines mit der geringsten mittleren Verspätung an!</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>1. Berechnen Sie die mittlere Verspätung pro Flughafen!</p>
+
+<pre><code class="r">f2 &lt;-  group_by(flights, origin)
+f3 &lt;- mutate(f2, delay = dep_delay - arr_delay)
+summarise(f3, delay_mean = mean(delay, na.rm = TRUE))
+</code></pre>
+
+<p>2. Ermitteln Sie pro Monat den Flug mit der größten Verspätung!</p>
+
+<pre><code class="r">f2 &lt;- group_by(flights, month)
+f3 &lt;- mutate(f2, delay = dep_delay - arr_delay)
+summarise(f3, delay_max = max(delay, na.rm = T))
+</code></pre>
+
+<p>3. Geben Sie die Airlines mit der geringsten mittleren Verspätung an!</p>
+
+<pre><code class="r">f2 &lt;- group_by(flights, carrier)
+f3 &lt;- mutate(f2, delay = dep_delay - arr_delay)
+f4 &lt;- filter(f3, !is.na(delay))
+f5 &lt;- summarise(f4, delay_min = mean(delay))
+arrange(f5, delay_min)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Verschachtelte Syntax ist schwer zu lesen</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">hourly_delay &lt;- filter(
+  summarise(
+    group_by(
+      filter(
+flights,
+        !is.na(dep_delay)
+      ),
+date, hour ),
+    delay = mean(dep_delay),
+n = n() ),
+n &gt; 10 )
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Die Pfeife %&gt;%</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><a href="http://collections.lacma.org/node/239578">Das ist keine Pfeife</a> <code>{magrittr}</code></li>
+<li><code>x %&gt;% f(y)</code> ist dasselbe wie <code>f(x, y)</code></li>
+</ul>
+
+<pre><code class="r">hourly_delay &lt;- flights %&gt;%
+  filter(!is.na(dep_delay)) %&gt;%
+  group_by(date, hour) %&gt;%
+  summarise(delay = mean(dep_delay), n = n()) %&gt;%
+  filter(n &gt; 10)
+</code></pre>
+
+<ul>
+<li>Tipp: <code>%&gt;%</code> kann man lesen als &quot;<em>und dann</em>&quot;</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Übung zur Pfeife</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Was sind die oberen 10% der Airlines bei der Verspätung?</li>
+<li>Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (&gt; 1 Stunde)!</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Lösungsideen</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Was sind die oberen 10% der Airlines bei der Verspätung?</p>
+
+<pre><code class="r">flights %&gt;%
+  group_by(carrier) %&gt;% na.omit() %&gt;%
+  mutate(delay = dep_delay - arr_delay) %&gt;%
+  summarise(delay_mean = mean(delay, na.rm = TRUE)) %&gt;%
+  filter(delay_mean &lt; quantile(delay_mean, .1)) %&gt;%
+  # oder: filter(ntile(delay_mean, 10) == 1) %&gt;%
+  arrange(delay_mean)
+</code></pre>
+
+<p>Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (&gt; 1 Stunde)!</p>
+
+<pre><code class="r">flights %&gt;%  na.omit() %&gt;%
+  mutate(delay = dep_delay - arr_delay) %&gt;%
+  filter(delay &gt; 60) %&gt;%
+  summarise(delay_mean = mean(delay),
+            n = n()) %&gt;%  # Anzahl
+  arrange(delay_mean)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Wie sind die Verspätungen verteilt?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="600" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Hängen Flugzeit und Verspätung zusammen?</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">flights %&gt;%
+  mutate(delay = dep_delay - arr_delay) %&gt;%
+  na.omit() %&gt;% qplot(x = distance, y = delay, data = .) 
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Was ist die Top-10 der lahmen Airlines?</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">flights %&gt;%
+  group_by(carrier) %&gt;% na.omit() %&gt;%
+  mutate(delay = dep_delay - arr_delay) %&gt;%
+  ungroup() %&gt;% filter(min_rank(delay) &lt; 11) %&gt;%
+  arrange(delay) %&gt;% qplot(data = ., x = reorder(carrier, delay), y = delay,
+        geom = &quot;point&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Danke/Referenzen</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Danke an Hadley Wickham für <code>dplyr</code>, <code>ggplot2</code> und das Hadleyverse</li>
+<li>Dieser Kurs basiert auf <a href="https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a">diesem</a> Tutorial 
+von Hadley Wickham</li>
+<li>Kontakt: Sebastian Sauer, sebastian.sauer-AT-fom.de</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='R: Die neuesten Tools, elegante Diagramme'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Anatomie der Datenanalyse'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Anatomie der Datenanalyse (Englisch)'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='<code>dplyr</code> stellt die &quot;Analyse-Verben&quot; zur Verfügung'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Wir brauchen heute diese R-Pakete sowie RStudio'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='glimpse(flights)'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Der Datensatz <code>mtcars</code>'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Zeilen filtern mit filter()'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Beispiele für filter()'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Übung zu filter()'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Lösungsideen'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Spalten wählen mit select()'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Übung zu select'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Lösungsideen'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Zeilen sortieren mit arrange()'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Zeilen absteigend sortieren mit arrange(desc())'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Übung zu arrange()'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Lösungsideen'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Variablen (und ihre Werte) verändern'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Übung zu mutate()'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Lösungsideen'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Zusammenfassen mit summarise()'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Gruppieren plus zusammenfassen mit summarise()'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Funktionen zum Zusammenfassen'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Übung zu summarise() nach group_by()'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Lösungsideen'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Verschachtelte Syntax ist schwer zu lesen'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Die Pfeife %&gt;%'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Übung zur Pfeife'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Lösungsideen'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Wie sind die Verspätungen verteilt?'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Hängen Flugzeit und Verspätung zusammen?'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Was ist die Top-10 der lahmen Airlines?'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Danke/Referenzen'>
+         35
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
