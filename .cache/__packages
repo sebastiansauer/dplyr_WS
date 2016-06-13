@@ -1,0 +1,11 @@
+base
+knitr
+ggplot2
+dplyr
+gridExtra
+nycflights13
+pander
+ggvis
+rCharts
+googleVis
+xtable
