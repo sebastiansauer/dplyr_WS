@@ -30,6 +30,20 @@ em {
 
 
 
+## Was machen wir heute? Und warum?
+
+
+**WAS**:
+- Vertraut machen mit einem schönem **Werkzeug** zur **praktischen Datenanalyse** (`dplyr`)
+- Einüben von **explorativer** ("praktischer") **Analyse** von **ziemlich großen Daten** 
+
+
+**WARUM**:
+- Datenanalyse in Wissenschaft und Praxis besteht zum **großen Teil** im **Aufbereiten** und **Explorieren** des Datensatzes
+- Die **Größe** von Datensätzen **steigt** schnell
+- Wer den Schritt vom Gelegenheitsspieler zum **Routinetäter** gehen will, braucht **Profi-Werkzeug**
+---
+
 
 ## Excel oder R oder ...?
 
@@ -46,7 +60,6 @@ em {
 |schöne Diagramme            |      |X  |    |
 |Interaktive Applets         |      |X  |    |
 |Open Code                   |      |X  |(X) |
-
 ---
 
 
@@ -58,23 +71,15 @@ em {
 ---
 
 
+## Big Data?
+<img src="http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="900" style="display: block; margin: auto;" />
 
-
-## Anatomie der Datenanalyse
-Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfassen:
-
-
-- Zeilen filtern
-- Spalten wählen
-- Sortieren
-- Zusammenfassen
-- Verändern
-- Gruppieren
 
 ---
 
 
-## Anatomie der Datenanalyse (Englisch)
+## Anatomie der Datenanalyse
+Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfassen:
 
 
 - Zeilen filtern -- **`filter`**
@@ -87,18 +92,20 @@ Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfa
 ---
 
 
+
+
 ## `dplyr` stellt die "Analyse-Verben" zur Verfügung
 [Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
-<img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="600" style="display: block; margin: auto;" />
+<img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" />
 
 
 ---
 
 
 
-## Wir brauchen heute diese R-Pakete sowie RStudio
-
+## Diese Software brauchen wir
+- [R](https://cran.r-project.org)
 
 
 ```r
@@ -110,19 +117,19 @@ library(dplyr)
 library(ggplot2)
 library(nycflights13)
 data(flights)  # lädt Datensatz
+?flights  # Beschreibung des Datensatzes
 ```
 
 - Installieren Sie [RStudio](http://www.RStudio.com).
 
-- Alternativ kann man die Daten auch [hier](https://s3-us-west-2.amazonaws.com/sparkr-data/nycflights13.csv) herunterladen.
+- Alternativ kann man den Datensatz `flights` auch [hier](https://s3-us-west-2.amazonaws.com/sparkr-data/nycflights13.csv) herunterladen.
 
-- Verfolgen Sie die Analyse auch in Excel mit.
+- Excel-Freaks: Verfolgt die Analyse parallel in Excel mit!
 
 ---
 
 
 ## glimpse(flights)
-
 
 ```
 ## Observations: 336,776
@@ -153,6 +160,8 @@ data(flights)  # lädt Datensatz
 ## Der Datensatz `mtcars`
 
 - Ein Datensatz zu technischen Merkmalen von Autos aus der US-Zeitschrift *Motor Trends*.
+
+- Wir benutzen als "Spielzeug-Datensatz" (XXS-Data)
 
 - Der Datensatz ist in R schon enthalten.
 
@@ -292,10 +301,15 @@ Spalten ausgewählt mit `select(mtcars, mgp, cyl, hp)`:
 
 ```r
 select(flights, arr_delay, dep_delay)
+
 select(flights, arr_delay:dep_delay)
+
 select(flights, contains("delay"))
+
 select(flights, ends_with("delay"))
+
 select(flights, c(6, 9))
+
 auswahl <- c("dep_delay", "arr_delay")
 select(flights, one_of(auswahl))
 ```
@@ -382,8 +396,11 @@ Zeilen **absteigend** sortiert nach `cyl`:
 
 ```r
 arrange(flights, month, day, sched_dep_time)
+
 flights2 <- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
+
 arrange(flights2, desc(dep_delay))
+
 arrange(flights2, desc(dep_delay - arr_delay))
 ```
 
@@ -470,7 +487,7 @@ Zusammenfassung der Spalte `hp` in einen einzigen Wert (Mittelwert):
 ## Gruppieren plus zusammenfassen mit summarise()
 
 `mtcars_by_cyl = group_by(mtcars, cyl)`
-
+`summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 
 *** =left
 Gruppieren nach `cyl` (und in einem data.frame ausgeben):
@@ -604,8 +621,7 @@ flights %>%
 Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
 
 ```r
-flights %>%  na.omit() %>%
-  mutate(delay = dep_delay - arr_delay) %>%
+flights %>%  na.omit() %>%  mutate(delay = dep_delay - arr_delay) %>%
   filter(delay > 60) %>%
   summarise(delay_mean = mean(delay),
             n = n()) %>%  # Anzahl
@@ -616,7 +632,18 @@ flights %>%  na.omit() %>%
 
 ## Wie sind die Verspätungen verteilt?
 
-<img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="600" style="display: block; margin: auto;" />
+
+```r
+f2 <- flights %>% 
+   na.omit() %>% mutate(delay = dep_delay - arr_delay) 
+
+  qplot(data = f2, x = delay,
+        main = paste("Delays [min]: Min: ", min(f2$delay),
+                     "; Max: ", max(f2$delay),
+                     "; Md: ", median(f2$delay), sep = ""))
+```
+
+<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="400" style="display: block; margin: auto;" />
 
 ---
 
@@ -632,7 +659,7 @@ flights %>%
   na.omit() %>% qplot(x = distance, y = delay, data = .) 
 ```
 
-<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" style="display: block; margin: auto;" />
+<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" />
 
 
 
@@ -645,14 +672,13 @@ flights %>%
 
 ```r
 flights %>%
-  group_by(carrier) %>% na.omit() %>%
-  mutate(delay = dep_delay - arr_delay) %>%
+  group_by(carrier) %>% na.omit() %>% mutate(delay = dep_delay - arr_delay) %>%
   ungroup() %>% filter(min_rank(delay) < 11) %>%
   arrange(delay) %>% qplot(data = ., x = reorder(carrier, delay), y = delay,
         geom = "point")
 ```
 
-<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" />
+<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
 
 
 ---
@@ -664,6 +690,7 @@ flights %>%
 - Dieser Kurs basiert auf [diesem](https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a) Tutorial 
 von Hadley Wickham
 - Kontakt: Sebastian Sauer, sebastian.sauer-AT-fom.de
+- Die Folien (inkl. Syntax) findet sich [hier](https://github.com/sebastiansauer/dplyr_WS)
 
 
 

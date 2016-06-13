@@ -54,6 +54,24 @@ em {
 }
 </style>
 
+<h2>Was machen wir heute? Und warum?</h2>
+
+<p><strong>WAS</strong>:</p>
+
+<ul>
+<li>Vertraut machen mit einem schönem <strong>Werkzeug</strong> zur <strong>praktischen Datenanalyse</strong> (<code>dplyr</code>)</li>
+<li>Einüben von <strong>explorativer</strong> (&quot;praktischer&quot;) <strong>Analyse</strong> von <strong>ziemlich großen Daten</strong> </li>
+</ul>
+
+<p><strong>WARUM</strong>:</p>
+
+<ul>
+<li>Datenanalyse in Wissenschaft und Praxis besteht zum <strong>großen Teil</strong> im <strong>Aufbereiten</strong> und <strong>Explorieren</strong> des Datensatzes</li>
+<li>Die <strong>Größe</strong> von Datensätzen <strong>steigt</strong> schnell</li>
+</ul>
+
+<h2>- Wer den Schritt vom Gelegenheitsspieler zum <strong>Routinetäter</strong> gehen will, braucht <strong>Profi-Werkzeug</strong></h2>
+
 <h2>Excel oder R oder ...?</h2>
 
 <table><thead>
@@ -126,16 +144,22 @@ em {
 </tr>
 </tbody></table>
 
+<hr>
+
+<h2>R: Die neuesten Tools, elegante Diagramme</h2>
+
+<p><img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" /></p>
+
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-2" style="background:;">
   <hgroup>
-    <h2>R: Die neuesten Tools, elegante Diagramme</h2>
+    <h2>Big Data?</h2>
   </hgroup>
   <article data-timings="">
-    <p><img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" /></p>
+    <p><img src="http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="900" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -149,24 +173,6 @@ em {
     <p>Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfassen:</p>
 
 <ul>
-<li>Zeilen filtern</li>
-<li>Spalten wählen</li>
-<li>Sortieren</li>
-<li>Zusammenfassen</li>
-<li>Verändern</li>
-<li>Gruppieren</li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-4" style="background:;">
-  <hgroup>
-    <h2>Anatomie der Datenanalyse (Englisch)</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
 <li>Zeilen filtern -- <strong><code>filter</code></strong></li>
 <li>Spalten wählen -- <strong><code>select</code></strong></li>
 <li>Sortieren -- <strong><code>arrange</code></strong></li>
@@ -179,25 +185,29 @@ em {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-5" style="background:;">
+<slide class="" id="slide-4" style="background:;">
   <hgroup>
     <h2><code>dplyr</code> stellt die &quot;Analyse-Verben&quot; zur Verfügung</h2>
   </hgroup>
   <article data-timings="">
     <p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Cheatsheet</a></p>
 
-<p><img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="600" style="display: block; margin: auto;" /></p>
+<p><img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-6" style="background:;">
+<slide class="" id="slide-5" style="background:;">
   <hgroup>
-    <h2>Wir brauchen heute diese R-Pakete sowie RStudio</h2>
+    <h2>Diese Software brauchen wir</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r"># packages müssen einmalig installiert sein, bevor Sie sie laden können
+    <ul>
+<li><a href="https://cran.r-project.org">R</a></li>
+</ul>
+
+<pre><code class="r"># packages müssen einmalig installiert sein, bevor Sie sie laden können
 # update.packages()  # zur Sicherheit auf den neuesten Stand kommen
 # install.packages(c(&quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;nycflights13&quot;))
 
@@ -205,19 +215,20 @@ library(dplyr)
 library(ggplot2)
 library(nycflights13)
 data(flights)  # lädt Datensatz
+?flights  # Beschreibung des Datensatzes
 </code></pre>
 
 <ul>
 <li><p>Installieren Sie <a href="http://www.RStudio.com">RStudio</a>.</p></li>
-<li><p>Alternativ kann man die Daten auch <a href="https://s3-us-west-2.amazonaws.com/sparkr-data/nycflights13.csv">hier</a> herunterladen.</p></li>
-<li><p>Verfolgen Sie die Analyse auch in Excel mit.</p></li>
+<li><p>Alternativ kann man den Datensatz <code>flights</code> auch <a href="https://s3-us-west-2.amazonaws.com/sparkr-data/nycflights13.csv">hier</a> herunterladen.</p></li>
+<li><p>Excel-Freaks: Verfolgt die Analyse parallel in Excel mit!</p></li>
 </ul>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-7" style="background:;">
+<slide class="" id="slide-6" style="background:;">
   <hgroup>
     <h2>glimpse(flights)</h2>
   </hgroup>
@@ -249,13 +260,14 @@ data(flights)  # lädt Datensatz
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-8" style="background:;">
+<slide class="" id="slide-7" style="background:;">
   <hgroup>
     <h2>Der Datensatz <code>mtcars</code></h2>
   </hgroup>
   <article data-timings="">
     <ul>
 <li><p>Ein Datensatz zu technischen Merkmalen von Autos aus der US-Zeitschrift <em>Motor Trends</em>.</p></li>
+<li><p>Wir benutzen als &quot;Spielzeug-Datensatz&quot; (XXS-Data)</p></li>
 <li><p>Der Datensatz ist in R schon enthalten.</p></li>
 </ul>
 
@@ -268,7 +280,7 @@ data(flights)  # lädt Datensatz
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-9" style="background:;">
+<slide class="" id="slide-8" style="background:;">
   <hgroup>
     <h2>Zeilen filtern mit filter()</h2>
   </hgroup>
@@ -389,7 +401,7 @@ data(flights)  # lädt Datensatz
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-10" style="background:;">
+<slide class="" id="slide-9" style="background:;">
   <hgroup>
     <h2>Beispiele für filter()</h2>
   </hgroup>
@@ -406,7 +418,7 @@ filter(mtcars, hp &gt; 300 &amp; cyl == 8)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-11" style="background:;">
+<slide class="" id="slide-10" style="background:;">
   <hgroup>
     <h2>Übung zu filter()</h2>
   </hgroup>
@@ -425,7 +437,7 @@ filter(mtcars, hp &gt; 300 &amp; cyl == 8)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-12" style="background:;">
+<slide class="" id="slide-11" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
@@ -445,7 +457,7 @@ filter(flights, origin == &quot;JFK&quot; &amp; arr_delay &gt; 2 * dep_delay &am
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-13" style="background:;">
+<slide class="" id="slide-12" style="background:;">
   <hgroup>
     <h2>Spalten wählen mit select()</h2>
   </hgroup>
@@ -577,7 +589,7 @@ filter(flights, origin == &quot;JFK&quot; &amp; arr_delay &gt; 2 * dep_delay &am
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-14" style="background:;">
+<slide class="" id="slide-13" style="background:;">
   <hgroup>
     <h2>Übung zu select</h2>
   </hgroup>
@@ -592,16 +604,21 @@ filter(flights, origin == &quot;JFK&quot; &amp; arr_delay &gt; 2 * dep_delay &am
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-15" style="background:;">
+<slide class="" id="slide-14" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
   <article data-timings="">
     <pre><code class="r">select(flights, arr_delay, dep_delay)
+
 select(flights, arr_delay:dep_delay)
+
 select(flights, contains(&quot;delay&quot;))
+
 select(flights, ends_with(&quot;delay&quot;))
+
 select(flights, c(6, 9))
+
 auswahl &lt;- c(&quot;dep_delay&quot;, &quot;arr_delay&quot;)
 select(flights, one_of(auswahl))
 </code></pre>
@@ -610,7 +627,7 @@ select(flights, one_of(auswahl))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-16" style="background:;">
+<slide class="" id="slide-15" style="background:;">
   <hgroup>
     <h2>Zeilen sortieren mit arrange()</h2>
   </hgroup>
@@ -735,7 +752,7 @@ select(flights, one_of(auswahl))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-17" style="background:;">
+<slide class="" id="slide-16" style="background:;">
   <hgroup>
     <h2>Zeilen absteigend sortieren mit arrange(desc())</h2>
   </hgroup>
@@ -860,7 +877,7 @@ select(flights, one_of(auswahl))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-18" style="background:;">
+<slide class="" id="slide-17" style="background:;">
   <hgroup>
     <h2>Übung zu arrange()</h2>
   </hgroup>
@@ -876,14 +893,17 @@ select(flights, one_of(auswahl))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-19" style="background:;">
+<slide class="" id="slide-18" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
   <article data-timings="">
     <pre><code class="r">arrange(flights, month, day, sched_dep_time)
+
 flights2 &lt;- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
+
 arrange(flights2, desc(dep_delay))
+
 arrange(flights2, desc(dep_delay - arr_delay))
 </code></pre>
 
@@ -891,7 +911,7 @@ arrange(flights2, desc(dep_delay - arr_delay))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-20" style="background:;">
+<slide class="" id="slide-19" style="background:;">
   <hgroup>
     <h2>Variablen (und ihre Werte) verändern</h2>
   </hgroup>
@@ -1037,7 +1057,7 @@ arrange(flights2, desc(dep_delay - arr_delay))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-21" style="background:;">
+<slide class="" id="slide-20" style="background:;">
   <hgroup>
     <h2>Übung zu mutate()</h2>
   </hgroup>
@@ -1052,7 +1072,7 @@ arrange(flights2, desc(dep_delay - arr_delay))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-22" style="background:;">
+<slide class="" id="slide-21" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
@@ -1067,7 +1087,7 @@ mutate(flights, dist_km = distance / 1.6)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-23" style="background:;">
+<slide class="" id="slide-22" style="background:;">
   <hgroup>
     <h2>Zusammenfassen mit summarise()</h2>
   </hgroup>
@@ -1147,12 +1167,13 @@ mutate(flights, dist_km = distance / 1.6)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-24" style="background:;">
+<slide class="" id="slide-23" style="background:;">
   <hgroup>
     <h2>Gruppieren plus zusammenfassen mit summarise()</h2>
   </hgroup>
   <article data-timings="">
-    <p><code>mtcars_by_cyl = group_by(mtcars, cyl)</code></p>
+    <p><code>mtcars_by_cyl = group_by(mtcars, cyl)</code>
+<code>summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))</code></p>
 
 <div style='float:left;width:48%;' class='centered'>
   <p>Gruppieren nach <code>cyl</code> (und in einem data.frame ausgeben):</p>
@@ -1239,7 +1260,7 @@ mutate(flights, dist_km = distance / 1.6)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-24" style="background:;">
   <hgroup>
     <h2>Funktionen zum Zusammenfassen</h2>
   </hgroup>
@@ -1255,7 +1276,7 @@ mutate(flights, dist_km = distance / 1.6)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-25" style="background:;">
   <hgroup>
     <h2>Übung zu summarise() nach group_by()</h2>
   </hgroup>
@@ -1270,7 +1291,7 @@ mutate(flights, dist_km = distance / 1.6)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-26" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
@@ -1302,7 +1323,7 @@ arrange(f5, delay_min)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-27" style="background:;">
   <hgroup>
     <h2>Verschachtelte Syntax ist schwer zu lesen</h2>
   </hgroup>
@@ -1324,7 +1345,7 @@ n &gt; 10 )
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-28" style="background:;">
   <hgroup>
     <h2>Die Pfeife %&gt;%</h2>
   </hgroup>
@@ -1349,7 +1370,7 @@ n &gt; 10 )
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h2>Übung zur Pfeife</h2>
   </hgroup>
@@ -1363,7 +1384,7 @@ n &gt; 10 )
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h2>Lösungsideen</h2>
   </hgroup>
@@ -1381,8 +1402,7 @@ n &gt; 10 )
 
 <p>Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (&gt; 1 Stunde)!</p>
 
-<pre><code class="r">flights %&gt;%  na.omit() %&gt;%
-  mutate(delay = dep_delay - arr_delay) %&gt;%
+<pre><code class="r">flights %&gt;%  na.omit() %&gt;%  mutate(delay = dep_delay - arr_delay) %&gt;%
   filter(delay &gt; 60) %&gt;%
   summarise(delay_mean = mean(delay),
             n = n()) %&gt;%  # Anzahl
@@ -1393,18 +1413,27 @@ n &gt; 10 )
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   <hgroup>
     <h2>Wie sind die Verspätungen verteilt?</h2>
   </hgroup>
   <article data-timings="">
-    <p><img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="600" style="display: block; margin: auto;" /></p>
+    <pre><code class="r">f2 &lt;- flights %&gt;% 
+   na.omit() %&gt;% mutate(delay = dep_delay - arr_delay) 
+
+  qplot(data = f2, x = delay,
+        main = paste(&quot;Delays [min]: Min: &quot;, min(f2$delay),
+                     &quot;; Max: &quot;, max(f2$delay),
+                     &quot;; Md: &quot;, median(f2$delay), sep = &quot;&quot;))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="400" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>Hängen Flugzeit und Verspätung zusammen?</h2>
   </hgroup>
@@ -1414,32 +1443,31 @@ n &gt; 10 )
   na.omit() %&gt;% qplot(x = distance, y = delay, data = .) 
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" style="display: block; margin: auto;" /></p>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-34" style="background:;">
-  <hgroup>
-    <h2>Was ist die Top-10 der lahmen Airlines?</h2>
-  </hgroup>
-  <article data-timings="">
-    <pre><code class="r">flights %&gt;%
-  group_by(carrier) %&gt;% na.omit() %&gt;%
-  mutate(delay = dep_delay - arr_delay) %&gt;%
-  ungroup() %&gt;% filter(min_rank(delay) &lt; 11) %&gt;%
-  arrange(delay) %&gt;% qplot(data = ., x = reorder(carrier, delay), y = delay,
-        geom = &quot;point&quot;)
-</code></pre>
-
 <p><img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-35" style="background:;">
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Was ist die Top-10 der lahmen Airlines?</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">flights %&gt;%
+  group_by(carrier) %&gt;% na.omit() %&gt;% mutate(delay = dep_delay - arr_delay) %&gt;%
+  ungroup() %&gt;% filter(min_rank(delay) &lt; 11) %&gt;%
+  arrange(delay) %&gt;% qplot(data = ., x = reorder(carrier, delay), y = delay,
+        geom = &quot;point&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>Danke/Referenzen</h2>
   </hgroup>
@@ -1449,6 +1477,7 @@ n &gt; 10 )
 <li>Dieser Kurs basiert auf <a href="https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a">diesem</a> Tutorial 
 von Hadley Wickham</li>
 <li>Kontakt: Sebastian Sauer, sebastian.sauer-AT-fom.de</li>
+<li>Die Folien (inkl. Syntax) findet sich <a href="https://github.com/sebastiansauer/dplyr_WS">hier</a></li>
 </ul>
 
   </article>
@@ -1467,7 +1496,7 @@ von Hadley Wickham</li>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='R: Die neuesten Tools, elegante Diagramme'>
+        data-slide=2 title='Big Data?'>
          2
       </a>
     </li>
@@ -1479,194 +1508,188 @@ von Hadley Wickham</li>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Anatomie der Datenanalyse (Englisch)'>
+        data-slide=4 title='<code>dplyr</code> stellt die &quot;Analyse-Verben&quot; zur Verfügung'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='<code>dplyr</code> stellt die &quot;Analyse-Verben&quot; zur Verfügung'>
+        data-slide=5 title='Diese Software brauchen wir'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Wir brauchen heute diese R-Pakete sowie RStudio'>
+        data-slide=6 title='glimpse(flights)'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='glimpse(flights)'>
+        data-slide=7 title='Der Datensatz <code>mtcars</code>'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Der Datensatz <code>mtcars</code>'>
+        data-slide=8 title='Zeilen filtern mit filter()'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Zeilen filtern mit filter()'>
+        data-slide=9 title='Beispiele für filter()'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Beispiele für filter()'>
+        data-slide=10 title='Übung zu filter()'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Übung zu filter()'>
+        data-slide=11 title='Lösungsideen'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Lösungsideen'>
+        data-slide=12 title='Spalten wählen mit select()'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Spalten wählen mit select()'>
+        data-slide=13 title='Übung zu select'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Übung zu select'>
+        data-slide=14 title='Lösungsideen'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Lösungsideen'>
+        data-slide=15 title='Zeilen sortieren mit arrange()'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Zeilen sortieren mit arrange()'>
+        data-slide=16 title='Zeilen absteigend sortieren mit arrange(desc())'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='Zeilen absteigend sortieren mit arrange(desc())'>
+        data-slide=17 title='Übung zu arrange()'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Übung zu arrange()'>
+        data-slide=18 title='Lösungsideen'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Lösungsideen'>
+        data-slide=19 title='Variablen (und ihre Werte) verändern'>
          19
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Variablen (und ihre Werte) verändern'>
+        data-slide=20 title='Übung zu mutate()'>
          20
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Übung zu mutate()'>
+        data-slide=21 title='Lösungsideen'>
          21
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Lösungsideen'>
+        data-slide=22 title='Zusammenfassen mit summarise()'>
          22
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Zusammenfassen mit summarise()'>
+        data-slide=23 title='Gruppieren plus zusammenfassen mit summarise()'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Gruppieren plus zusammenfassen mit summarise()'>
+        data-slide=24 title='Funktionen zum Zusammenfassen'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Funktionen zum Zusammenfassen'>
+        data-slide=25 title='Übung zu summarise() nach group_by()'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Übung zu summarise() nach group_by()'>
+        data-slide=26 title='Lösungsideen'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Lösungsideen'>
+        data-slide=27 title='Verschachtelte Syntax ist schwer zu lesen'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Verschachtelte Syntax ist schwer zu lesen'>
+        data-slide=28 title='Die Pfeife %&gt;%'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Die Pfeife %&gt;%'>
+        data-slide=29 title='Übung zur Pfeife'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Übung zur Pfeife'>
+        data-slide=30 title='Lösungsideen'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Lösungsideen'>
+        data-slide=31 title='Wie sind die Verspätungen verteilt?'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Wie sind die Verspätungen verteilt?'>
+        data-slide=32 title='Hängen Flugzeit und Verspätung zusammen?'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Hängen Flugzeit und Verspätung zusammen?'>
+        data-slide=33 title='Was ist die Top-10 der lahmen Airlines?'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Was ist die Top-10 der lahmen Airlines?'>
+        data-slide=34 title='Danke/Referenzen'>
          34
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title='Danke/Referenzen'>
-         35
       </a>
     </li>
   </ul>
