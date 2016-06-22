@@ -104,7 +104,7 @@ Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfa
 ## `dplyr` stellt die "Analyse-Verben" zur Verfügung
 [Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
-<img src="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" />
+<img src="http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" />
 
 
 ---
