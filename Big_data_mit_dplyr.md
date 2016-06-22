@@ -30,6 +30,11 @@ em {
 
 
 
+
+
+
+
+
 ## Was machen wir heute? Und warum?
 
 
@@ -42,6 +47,7 @@ em {
 - Datenanalyse in Wissenschaft und Praxis besteht zum **großen Teil** im **Aufbereiten** und **Explorieren** des Datensatzes
 - Die **Größe** von Datensätzen **steigt** schnell
 - Wer den Schritt vom Gelegenheitsspieler zum **Routinetäter** gehen will, braucht **Profi-Werkzeug**
+
 ---
 
 
@@ -60,6 +66,7 @@ em {
 |schöne Diagramme            |      |X  |    |
 |Interaktive Applets         |      |X  |    |
 |Open Code                   |      |X  |(X) |
+
 ---
 
 

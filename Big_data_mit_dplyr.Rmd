@@ -27,6 +27,8 @@ em {
 </style>
 
 
+
+
 ```{r startup, echo = FALSE,  message = FALSE, warning = FALSE, cache = FALSE}
 library(knitr)
 library(ggplot2)
@@ -42,6 +44,9 @@ suppressPackageStartupMessages(library(xtable))
 ```
 
 
+
+
+
 ## Was machen wir heute? Und warum?
 
 
@@ -54,6 +59,7 @@ suppressPackageStartupMessages(library(xtable))
 - Datenanalyse in Wissenschaft und Praxis besteht zum **großen Teil** im **Aufbereiten** und **Explorieren** des Datensatzes
 - Die **Größe** von Datensätzen **steigt** schnell
 - Wer den Schritt vom Gelegenheitsspieler zum **Routinetäter** gehen will, braucht **Profi-Werkzeug**
+
 ---
 
 
@@ -63,6 +69,7 @@ suppressPackageStartupMessages(library(xtable))
 tools <- read.csv("tools.csv")
 kable(tools)
 ```
+
 ---
 
 
