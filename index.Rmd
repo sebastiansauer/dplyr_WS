@@ -142,7 +142,7 @@ Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfa
 [Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 ```{r, eval = TRUE, echo = FALSE, out.width = 600, fig.retina = NULL, fig.align  = "center", cache = TRUE}
-knitr::include_graphics("https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf")
+knitr::include_graphics("http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg")
 ```
 
 
