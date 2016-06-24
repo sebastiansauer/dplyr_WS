@@ -8,5 +8,7 @@ __Archive__
 __Archive__/
 rsconnect/
 .cache/
+.cache/*
+.cache/*.*
 assets/
 
