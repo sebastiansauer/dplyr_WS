@@ -10,3 +10,4 @@ rsconnect/
 .cache/
 .cache/*
 .cache/*.*
+assets/
