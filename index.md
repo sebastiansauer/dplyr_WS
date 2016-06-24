@@ -33,8 +33,6 @@ em {
 
 
 
-
-
 ## Was machen wir heute? Und warum?
 
 
