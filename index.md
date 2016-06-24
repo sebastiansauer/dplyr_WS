@@ -38,7 +38,7 @@ em {
 
 **WAS**:
 - Vertraut machen mit einem schönem **Werkzeug** zur **praktischen Datenanalyse** (`dplyr`)
-- Einüben von **explorativer** ("praktischer") **Analyse** von **ziemlich großen Daten** 
+- Einüben von **explorativer** ("praktischer") **Analyse** von **ziemlich großen Daten**  
 
 
 **WARUM**:
