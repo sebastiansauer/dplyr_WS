@@ -29,22 +29,7 @@ em {
 
 
 
-```{r startup, echo = FALSE,  message = FALSE, warning = FALSE, cache = FALSE}
-library(knitr)
-library(ggplot2)
-suppressPackageStartupMessages(library(plotly))
-suppressMessages(library(dplyr))
-suppressMessages(library(gridExtra))
-library(nycflights13)
-suppressPackageStartupMessages(library(pander))
-suppressMessages(library(ggvis))
-suppressMessages(library(rCharts))
-library(rCharts)
-suppressPackageStartupMessages(library(googleVis))
-suppressPackageStartupMessages(library(xtable))
-suppressPackageStartupMessages(library(plotly))
 
-```
 
 
 
@@ -66,10 +51,19 @@ suppressPackageStartupMessages(library(plotly))
 
 ## Excel oder R oder ...?
 
-```{r, echo = FALSE}
-tools <- read.csv("tools.csv")
-kable(tools)
-```
+
+|.                           |Excel |R  |SQL |
+|:---------------------------|:-----|:--|:---|
+|schon bekannt               |X     |   |    |
+|kleine Daten (<10^5 Zeilen) |X     |X  |    |
+|kleine große Daten (<10 GB) |      |X  |    |
+|große Daten (>10 GB)        |      |   |X   |
+|automatisierbar             |      |X  |X   |
+|transparent                 |      |X  |X   |
+|moderne Statistik           |      |X  |    |
+|schöne Diagramme            |      |X  |    |
+|Interaktive Applets         |      |X  |    |
+|Open Code                   |      |X  |(X) |
 
 ---
 
@@ -77,62 +71,13 @@ kable(tools)
 
 ## R: Die neuesten Tools, elegante Diagramme
 
-```{r fig_diamonds, echo = FALSE, fig.width = 9, fig.height = 5, warnings = FALSE, message = FALSE, out.width = 900, out.height = 500, cache = TRUE}
-
-options(warn = -1)
-
-data(diamonds, package = "ggplot2")
-d <- diamonds %>% 
-  na.omit() %>% 
-  sample_n(1000)
-
-
-p1 <- ggplot(d, aes(x = carat, y = price)) +
-  facet_wrap(~cut, ncol = 1, scales = "free") +
-  geom_point(alpha = .3, size = 1) +
-  geom_smooth(aes(colour = cut, fill = cut)) +
-  ylim(c(0, 20000)) +
-  theme(legend.position = "none")
-
-
-d_sum <-
-  d %>%
-  select(cut, price, color) %>%
-  group_by(cut) %>%
-  summarise(xintercept = mean(price))
-
-
-p2 <- ggplot(d, aes(x = price, fill = cut, color = cut)) +
-  geom_histogram() +
-  facet_wrap(~cut, ncol = 1, scales = "free") +
-  geom_vline(data = d_sum, aes(xintercept = xintercept)) +
-  geom_text(data = d_sum, aes(label = trunc(xintercept), x = xintercept+1000),
-            y = 6000, hjust = 0) +
-  theme(legend.position = "false") +
-  scale_x_continuous(breaks = c(0, 5000, 1000))
-
-grid.arrange(p1, p2, nrow = 1)
-
-```
+<img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" />
 
 ---
-
-## Prozess der Datenanalyse
-
-```{r, echo = FALSE, eval = TRUE}
-include_graphics("https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true")
-```
-
-Quelle: [https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true](https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true)
-
----
-
 
 
 ## Big Data?
-```{r, eval = TRUE, echo = FALSE, out.width = 900, fig.retina = NULL, fig.align  = "center", cache = TRUE}
-knitr::include_graphics("http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX")
-```
+<img src="http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="900" style="display: block; margin: auto;" />
 
 
 ---
@@ -157,9 +102,7 @@ Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfa
 ## `dplyr` stellt die "Analyse-Verben" zur Verfügung
 [Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
-```{r, eval = TRUE, echo = FALSE, out.width = 600, fig.retina = NULL, fig.align  = "center", cache = TRUE}
-knitr::include_graphics("http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg")
-```
+<img src="http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" />
 
 
 ---
@@ -169,7 +112,8 @@ knitr::include_graphics("http://www.psystudents.org/wp-content/uploads/2015/12/d
 ## Diese Software brauchen wir
 - [R](https://cran.r-project.org)
 
-```{r eval = FALSE, echo = TRUE}
+
+```r
 # packages müssen einmalig installiert sein, bevor Sie sie laden können
 # update.packages()  # zur Sicherheit auf den neuesten Stand kommen
 # install.packages(c("dplyr", "ggplot2", "nycflights13"))
@@ -191,10 +135,29 @@ data(flights)  # lädt Datensatz
 
 
 ## glimpse(flights)
-```{r look_data, echo = FALSE}
-options(width = 60)
-data(flights)
-glimpse(flights)
+
+```
+## Observations: 336,776
+## Variables: 19
+## $ year           (int) 2013, 2013, 2013, 2013, 2013, 20...
+## $ month          (int) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ day            (int) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ dep_time       (int) 517, 533, 542, 544, 554, 554, 55...
+## $ sched_dep_time (int) 515, 529, 540, 545, 600, 558, 60...
+## $ dep_delay      (dbl) 2, 4, 2, -1, -6, -4, -5, -3, -3,...
+## $ arr_time       (int) 830, 850, 923, 1004, 812, 740, 9...
+## $ sched_arr_time (int) 819, 830, 850, 1022, 837, 728, 8...
+## $ arr_delay      (dbl) 11, 20, 33, -18, -25, 12, 19, -1...
+## $ carrier        (chr) "UA", "UA", "AA", "B6", "DL", "U...
+## $ flight         (int) 1545, 1714, 1141, 725, 461, 1696...
+## $ tailnum        (chr) "N14228", "N24211", "N619AA", "N...
+## $ origin         (chr) "EWR", "LGA", "JFK", "JFK", "LGA...
+## $ dest           (chr) "IAH", "IAH", "MIA", "BQN", "ATL...
+## $ air_time       (dbl) 227, 227, 160, 183, 116, 150, 15...
+## $ distance       (dbl) 1400, 1416, 1089, 1576, 762, 719...
+## $ hour           (dbl) 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6,...
+## $ minute         (dbl) 15, 29, 40, 45, 0, 58, 0, 0, 0, ...
+## $ time_hour      (time) 2013-01-01 05:00:00, 2013-01-01...
 ```
 
 --- 
@@ -208,7 +171,8 @@ glimpse(flights)
 - Der Datensatz ist in R schon enthalten.
 
 Sehen Sie sich die Hilfe zu dem Datensatz an:
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 ?mtcars
 ```
 
@@ -220,18 +184,29 @@ Sehen Sie sich die Hilfe zu dem Datensatz an:
 
 *** =left
 Auszug aus `mtcars`:
-```{r, echo = FALSE}
-mt_head <- head(mtcars[c("mpg", "cyl", "hp", "wt")], 10)
-knitr::kable(mt_head)
-```
+
+|                  |  mpg| cyl|  hp|    wt|
+|:-----------------|----:|---:|---:|-----:|
+|Mazda RX4         | 21.0|   6| 110| 2.620|
+|Mazda RX4 Wag     | 21.0|   6| 110| 2.875|
+|Datsun 710        | 22.8|   4|  93| 2.320|
+|Hornet 4 Drive    | 21.4|   6| 110| 3.215|
+|Hornet Sportabout | 18.7|   8| 175| 3.440|
+|Valiant           | 18.1|   6| 105| 3.460|
+|Duster 360        | 14.3|   8| 245| 3.570|
+|Merc 240D         | 24.4|   4|  62| 3.190|
+|Merc 230          | 22.8|   4|  95| 3.150|
+|Merc 280          | 19.2|   6| 123| 3.440|
 
 
 *** =right
 
 Spalten gefiltert mit `cyl == 8`:
-```{r , echo = FALSE}
-dplyr::filter(mt_head, cyl == 8) %>% kable
-```
+
+|  mpg| cyl|  hp|   wt|
+|----:|---:|---:|----:|
+| 18.7|   8| 175| 3.44|
+| 14.3|   8| 245| 3.57|
 
 
 ---
@@ -242,7 +217,8 @@ dplyr::filter(mt_head, cyl == 8) %>% kable
 
 Entschlüsseln Sie diese Filter (Datensatz `flights`):
 
-```{r filter_demo, eval = FALSE, echo = TRUE}
+
+```r
 filter(mtcars, hp > 100)
 filter(mtcars, cyl %in% c(4, 6))
 filter(mtcars, gear == 3 | gear == 4)
@@ -265,8 +241,8 @@ Identifizieren Sie folgende Flüge:
 
 ## Lösungsideen
 
-```{r filter_solutions, echo = TRUE, eval = FALSE}
 
+```r
 filter(flights, origin == "JFK")
 
 filter(flights, origin == "JFK" & month == 1)
@@ -276,7 +252,6 @@ filter(flights, origin == "JFK" & month == 1 & dep_time < 500 & dest == "PWM" )
 filter(flights, origin == "JFK" & month == 1 & dep_time > 500 & dest == "PWM" )
 
 filter(flights, origin == "JFK" & arr_delay > 2 * dep_delay & month == 1, dest == "ATL")
-
 ```
 
 --- &twocol
@@ -290,15 +265,27 @@ filter(flights, origin == "JFK" & arr_delay > 2 * dep_delay & month == 1, dest =
 
 *** =left
 Auszug aus `mtcars`:
-```{r echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|    wt|  qsec|
+|:-----------------|----:|---:|---:|----:|-----:|-----:|
+|Mazda RX4         | 21.0|   6| 110|  160| 2.620| 16.46|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160| 2.875| 17.02|
+|Datsun 710        | 22.8|   4|  93|  108| 2.320| 18.61|
+|Hornet 4 Drive    | 21.4|   6| 110|  258| 3.215| 19.44|
+|Hornet Sportabout | 18.7|   8| 175|  360| 3.440| 17.02|
+|Valiant           | 18.1|   6| 105|  225| 3.460| 20.22|
 
 *** =right
 Spalten ausgewählt mit `select(mtcars, mgp, cyl, hp)`:
-```{r, echo = FALSE}
-head(mtcars) %>% select(mpg, cyl, hp) %>% kable
-```
+
+|                  |  mpg| cyl|  hp|
+|:-----------------|----:|---:|---:|
+|Mazda RX4         | 21.0|   6| 110|
+|Mazda RX4 Wag     | 21.0|   6| 110|
+|Datsun 710        | 22.8|   4|  93|
+|Hornet 4 Drive    | 21.4|   6| 110|
+|Hornet Sportabout | 18.7|   8| 175|
+|Valiant           | 18.1|   6| 105|
 
 ---
 
@@ -316,7 +303,8 @@ head(mtcars) %>% select(mpg, cyl, hp) %>% kable
 ## Lösungsideen
 
 
-```{r eval = FALSE, echo = TRUE}
+
+```r
 select(flights, arr_delay, dep_delay)
 
 select(flights, arr_delay:dep_delay)
@@ -341,15 +329,27 @@ select(flights, one_of(auswahl))
 
 *** =left
 Auszug aus `mtcars`:
-```{r, echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|    wt|  qsec|
+|:-----------------|----:|---:|---:|----:|-----:|-----:|
+|Mazda RX4         | 21.0|   6| 110|  160| 2.620| 16.46|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160| 2.875| 17.02|
+|Datsun 710        | 22.8|   4|  93|  108| 2.320| 18.61|
+|Hornet 4 Drive    | 21.4|   6| 110|  258| 3.215| 19.44|
+|Hornet Sportabout | 18.7|   8| 175|  360| 3.440| 17.02|
+|Valiant           | 18.1|   6| 105|  225| 3.460| 20.22|
 
 *** =right
 Zeilen *aufsteigend* sortiert nach `cyl` und nach `hp`:
-```{r, echo = FALSE}
-head(mtcars) %>% select(mpg, cyl, hp) %>%  arrange(cyl, hp) %>% kable
-```
+
+|  mpg| cyl|  hp|
+|----:|---:|---:|
+| 22.8|   4|  93|
+| 18.1|   6| 105|
+| 21.0|   6| 110|
+| 21.0|   6| 110|
+| 21.4|   6| 110|
+| 18.7|   8| 175|
 
 --- &twocol
 
@@ -361,16 +361,27 @@ head(mtcars) %>% select(mpg, cyl, hp) %>%  arrange(cyl, hp) %>% kable
 
 *** =left 
 Auszug aus `mtcars`:
-```{r, echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|    wt|  qsec|
+|:-----------------|----:|---:|---:|----:|-----:|-----:|
+|Mazda RX4         | 21.0|   6| 110|  160| 2.620| 16.46|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160| 2.875| 17.02|
+|Datsun 710        | 22.8|   4|  93|  108| 2.320| 18.61|
+|Hornet 4 Drive    | 21.4|   6| 110|  258| 3.215| 19.44|
+|Hornet Sportabout | 18.7|   8| 175|  360| 3.440| 17.02|
+|Valiant           | 18.1|   6| 105|  225| 3.460| 20.22|
 
 *** =right
 Zeilen **absteigend** sortiert nach `cyl`:
-```{r, echo = FALSE}
-head(mtcars) %>% select(mpg, cyl, hp) %>%
-  arrange(desc(cyl)) %>% kable
-```
+
+|  mpg| cyl|  hp|
+|----:|---:|---:|
+| 18.7|   8| 175|
+| 21.0|   6| 110|
+| 21.0|   6| 110|
+| 21.4|   6| 110|
+| 18.1|   6| 105|
+| 22.8|   4|  93|
 
 ---
 
@@ -387,7 +398,8 @@ head(mtcars) %>% select(mpg, cyl, hp) %>%
 
 ## Lösungsideen
 
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 arrange(flights, month, day, sched_dep_time)
 
 flights2 <- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
@@ -405,18 +417,27 @@ arrange(flights2, desc(dep_delay - arr_delay))
 
 *** =left
 Auszug aus `mtcars`:
-```{r, echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp, wt, qsec) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|    wt|  qsec|
+|:-----------------|----:|---:|---:|----:|-----:|-----:|
+|Mazda RX4         | 21.0|   6| 110|  160| 2.620| 16.46|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160| 2.875| 17.02|
+|Datsun 710        | 22.8|   4|  93|  108| 2.320| 18.61|
+|Hornet 4 Drive    | 21.4|   6| 110|  258| 3.215| 19.44|
+|Hornet Sportabout | 18.7|   8| 175|  360| 3.440| 17.02|
+|Valiant           | 18.1|   6| 105|  225| 3.460| 20.22|
 
 *** =right
 Neue Spalte `wt_per_ps`: Gewicht (`wt`) pro PS (`hp`):
-```{r, echo = FALSE}
-head(mtcars) %>%
-  select(wt, mpg, cyl, hp) %>%
-  mutate(wt_kg = wt*1000/2, wt_per_ps = wt_kg / hp) %>%
-  kable
-```
+
+|    wt|  mpg| cyl|  hp|  wt_kg| wt_per_ps|
+|-----:|----:|---:|---:|------:|---------:|
+| 2.620| 21.0|   6| 110| 1310.0| 11.909091|
+| 2.875| 21.0|   6| 110| 1437.5| 13.068182|
+| 2.320| 22.8|   4|  93| 1160.0| 12.473118|
+| 3.215| 21.4|   6| 110| 1607.5| 14.613636|
+| 3.440| 18.7|   8| 175| 1720.0|  9.828571|
+| 3.460| 18.1|   6| 105| 1730.0| 16.476191|
 
 ---
 
@@ -431,7 +452,8 @@ head(mtcars) %>%
 
 ## Lösungsideen
 
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 mutate(flights, speed = distance / air_time)
 arrange(flights, speed)
 mutate(flights, delay = dep_delay - arr_delay)
@@ -447,16 +469,22 @@ mutate(flights, dist_km = distance / 1.6)
 `summarise(flights, hp_mean = mean(hp))`
 
 *** =left
-```{r, echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|
+|:-----------------|----:|---:|---:|----:|
+|Mazda RX4         | 21.0|   6| 110|  160|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160|
+|Datsun 710        | 22.8|   4|  93|  108|
+|Hornet 4 Drive    | 21.4|   6| 110|  258|
+|Hornet Sportabout | 18.7|   8| 175|  360|
+|Valiant           | 18.1|   6| 105|  225|
 
 *** =right
 Zusammenfassung der Spalte `hp` in einen einzigen Wert (Mittelwert):
-```{r, echo = FALSE}
-head(mtcars) %>%
-  summarise(hp_mean = mean(hp, na.rm = TRUE)) %>% kable
-```
+
+|  hp_mean|
+|--------:|
+| 117.1667|
 
 --- &twocol
 
@@ -468,17 +496,24 @@ head(mtcars) %>%
 
 *** =left
 Gruppieren nach `cyl` (und in einem data.frame ausgeben):
-```{r, echo = FALSE}
-head(mtcars)  %>% select(mpg, cyl, hp, disp) %>% kable
-```
+
+|                  |  mpg| cyl|  hp| disp|
+|:-----------------|----:|---:|---:|----:|
+|Mazda RX4         | 21.0|   6| 110|  160|
+|Mazda RX4 Wag     | 21.0|   6| 110|  160|
+|Datsun 710        | 22.8|   4|  93|  108|
+|Hornet 4 Drive    | 21.4|   6| 110|  258|
+|Hornet Sportabout | 18.7|   8| 175|  360|
+|Valiant           | 18.1|   6| 105|  225|
 
 *** =right
 Zusammenfassen der Spalte `hp` *bei jeder Gruppe* in einen einzigen Wert:
-```{r, echo = FALSE}
-head(mtcars) %>%
-  group_by(cyl) %>%
-  summarise(hp_cyl_mean = mean(hp, na.rm = TRUE)) %>% kable
-```
+
+| cyl| hp_cyl_mean|
+|---:|-----------:|
+|   4|       93.00|
+|   6|      108.75|
+|   8|      175.00|
 
 ---
 
@@ -505,19 +540,22 @@ head(mtcars) %>%
 
 ## Lösungsideen
 1\. Berechnen Sie die mittlere Verspätung pro Flughafen!
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 f2 <-  group_by(flights, origin)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 summarise(f3, delay_mean = mean(delay, na.rm = TRUE))
 ```
 2\. Ermitteln Sie pro Monat den Flug mit der größten Verspätung!
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 f2 <- group_by(flights, month)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 summarise(f3, delay_max = max(delay, na.rm = T))
 ```
 3\. Geben Sie die Airlines mit der geringsten mittleren Verspätung an!
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 f2 <- group_by(flights, carrier)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 f4 <- filter(f3, !is.na(delay))
@@ -529,7 +567,8 @@ arrange(f5, delay_min)
 
 ## Verschachtelte Syntax ist schwer zu lesen
 
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 hourly_delay <- filter(
   summarise(
     group_by(
@@ -550,7 +589,8 @@ n > 10 )
 - [Das ist keine Pfeife](http://collections.lacma.org/node/239578) `{magrittr}`
 - `x %>% f(y)` ist dasselbe wie `f(x, y)`
 
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 hourly_delay <- flights %>%
   filter(!is.na(dep_delay)) %>%
   group_by(date, hour) %>%
@@ -573,7 +613,8 @@ hourly_delay <- flights %>%
 ## Lösungsideen
 
  Was sind die oberen 10% der Airlines bei der Verspätung?
-```{r, echo = TRUE, eval = FALSE}
+
+```r
 flights %>%
   group_by(carrier) %>% na.omit() %>%
   mutate(delay = dep_delay - arr_delay) %>%
@@ -583,7 +624,8 @@ flights %>%
   arrange(delay_mean)
 ```
 Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
-```{r echo = TRUE, eval = FALSE}
+
+```r
 flights %>%  na.omit() %>%  mutate(delay = dep_delay - arr_delay) %>%
   filter(delay > 60) %>%
   summarise(delay_mean = mean(delay),
@@ -595,8 +637,8 @@ flights %>%  na.omit() %>%  mutate(delay = dep_delay - arr_delay) %>%
 
 ## Wie sind die Verspätungen verteilt?
 
-```{r, eval = TRUE, cache = TRUE, echo = TRUE, fig.width = 6, fig.height= 5, fig.align = "center", warning = FALSE, message = FALSE, out.width = 400}
 
+```r
 f2 <- flights %>% 
    na.omit() %>% mutate(delay = dep_delay - arr_delay) 
 
@@ -604,9 +646,9 @@ f2 <- flights %>%
         main = paste("Delays [min]: Min: ", min(f2$delay),
                      "; Max: ", max(f2$delay),
                      "; Md: ", median(f2$delay), sep = ""))
-
-
 ```
+
+<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="400" style="display: block; margin: auto;" />
 
 ---
 
@@ -615,11 +657,14 @@ f2 <- flights %>%
 ## Hängen Flugzeit und Verspätung zusammen?
 
 
-```{r, eval = TRUE, cache = TRUE, echo = TRUE, fig.width = 6, fig.height = 5, fig.align = "center"}
+
+```r
 flights %>%
   mutate(delay = dep_delay - arr_delay) %>%
   na.omit() %>% qplot(x = distance, y = delay, data = .) 
 ```
+
+<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" />
 
 
 
@@ -629,13 +674,16 @@ flights %>%
 ## Was ist die Top-10 der lahmen Airlines?
 
 
-```{r, echo = TRUE, eval = TRUE, fig.align = "center", cache = TRUE, fig.width = 6, fig.height= 5}
+
+```r
 flights %>%
   group_by(carrier) %>% na.omit() %>% mutate(delay = dep_delay - arr_delay) %>%
   ungroup() %>% filter(min_rank(delay) < 11) %>%
   arrange(delay) %>% qplot(data = ., x = reorder(carrier, delay), y = delay,
         geom = "point")
 ```
+
+<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
 
 
 ---
