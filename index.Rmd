@@ -32,6 +32,7 @@ em {
 ```{r startup, echo = FALSE,  message = FALSE, warning = FALSE, cache = FALSE}
 library(knitr)
 library(ggplot2)
+suppressPackageStartupMessages(library(plotly))
 suppressMessages(library(dplyr))
 suppressMessages(library(gridExtra))
 library(nycflights13)
@@ -44,8 +45,6 @@ suppressPackageStartupMessages(library(xtable))
 suppressPackageStartupMessages(library(plotly))
 
 ```
-
-
 
 
 
@@ -83,23 +82,27 @@ kable(tools)
 options(warn = -1)
 
 data(diamonds, package = "ggplot2")
-diamonds <- na.omit(diamonds)
-p1 <- ggplot(na.omit(diamonds), aes(x = carat, y = price, color = carat)) +
+d <- diamonds %>% 
+  na.omit() %>% 
+  sample_n(1000)
+
+
+p1 <- ggplot(d, aes(x = carat, y = price)) +
   facet_wrap(~cut, ncol = 1, scales = "free") +
-  geom_point(alpha = .3) +
-  geom_smooth(method = "lm") +
-  ylim(c(0, 20000))
+  geom_point(alpha = .3, size = 1) +
+  geom_smooth(aes(colour = cut, fill = cut)) +
+  ylim(c(0, 20000)) +
+  theme(legend.position = "none")
 
 
 d_sum <-
-  diamonds %>%
-  na.omit() %>%
+  d %>%
   select(cut, price, color) %>%
   group_by(cut) %>%
   summarise(xintercept = mean(price))
 
 
-p2 <- ggplot(na.omit(diamonds), aes(x = price, fill = cut, color = cut)) +
+p2 <- ggplot(d, aes(x = price, fill = cut, color = cut)) +
   geom_histogram() +
   facet_wrap(~cut, ncol = 1, scales = "free") +
   geom_vline(data = d_sum, aes(xintercept = xintercept)) +
