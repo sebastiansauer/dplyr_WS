@@ -41,6 +41,8 @@ suppressMessages(library(rCharts))
 library(rCharts)
 suppressPackageStartupMessages(library(googleVis))
 suppressPackageStartupMessages(library(xtable))
+suppressPackageStartupMessages(library(plotly))
+
 ```
 
 
@@ -111,6 +113,17 @@ grid.arrange(p1, p2, nrow = 1)
 ```
 
 ---
+
+## Prozess der Datenanalyse
+
+```{r, echo = FALSE, eval = TRUE}
+include_graphics("https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true")
+```
+
+Quelle: [https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true](https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true)
+
+---
+
 
 
 ## Big Data?
