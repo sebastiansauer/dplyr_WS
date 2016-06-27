@@ -75,9 +75,18 @@ em {
 
 ---
 
+## Prozess der Datenanalyse
+
+![plot of chunk unnamed-chunk-2](https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true)
+
+Quelle: [https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true](https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true)
+
+---
+
+
 
 ## Big Data?
-<img src="http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="900" style="display: block; margin: auto;" />
+<img src="http://www.ibmbigdatahub.com/sites/default/files/styles/xlarge-scaled/public/infographic_image/4-Vs-of-big-data.jpg?itok=4syrvSLX" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="900" style="display: block; margin: auto;" />
 
 
 ---
@@ -102,7 +111,7 @@ Mit einer handvoll Verben lassen sich die meisten Aufgaben der Datenanalyse erfa
 ## `dplyr` stellt die "Analyse-Verben" zur Verfügung
 [Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
-<img src="http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600" style="display: block; margin: auto;" />
+<img src="http://www.psystudents.org/wp-content/uploads/2015/12/dpylr-Seite-2.jpg" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="600" style="display: block; margin: auto;" />
 
 
 ---
@@ -492,6 +501,7 @@ Zusammenfassung der Spalte `hp` in einen einzigen Wert (Mittelwert):
 ## Gruppieren plus zusammenfassen mit summarise()
 
 `mtcars_by_cyl = group_by(mtcars, cyl)`
+
 `summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 
 *** =left
@@ -648,7 +658,7 @@ f2 <- flights %>%
                      "; Md: ", median(f2$delay), sep = ""))
 ```
 
-<img src="assets/fig/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="400" style="display: block; margin: auto;" />
+<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="400" style="display: block; margin: auto;" />
 
 ---
 
@@ -664,7 +674,7 @@ flights %>%
   na.omit() %>% qplot(x = distance, y = delay, data = .) 
 ```
 
-<img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" style="display: block; margin: auto;" />
+<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
 
 
 
@@ -683,7 +693,7 @@ flights %>%
         geom = "point")
 ```
 
-<img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
+<img src="assets/fig/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" style="display: block; margin: auto;" />
 
 
 ---
