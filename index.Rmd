@@ -84,7 +84,7 @@ options(warn = -1)
 data(diamonds, package = "ggplot2")
 d <- diamonds %>% 
   na.omit() %>% 
-  sample_n(1000)
+  sample_n(1001)
 
 
 p1 <- ggplot(d, aes(x = carat, y = price)) +

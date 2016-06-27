@@ -500,7 +500,7 @@ Zusammenfassung der Spalte `hp` in einen einzigen Wert (Mittelwert):
 
 ## Gruppieren plus zusammenfassen mit summarise()
 
-`mtcars_by_cyl = group_by(mtcars, cyl)`
+`mtcars_by_cyl = group_by(mtcars, cyl);`
 
 `summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 
