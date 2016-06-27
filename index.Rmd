@@ -42,6 +42,8 @@ suppressMessages(library(rCharts))
 library(rCharts)
 suppressPackageStartupMessages(library(googleVis))
 suppressPackageStartupMessages(library(xtable))
+suppressPackageStartupMessages(library(plotly))
+
 ```
 
 
@@ -82,7 +84,7 @@ options(warn = -1)
 data(diamonds, package = "ggplot2")
 d <- diamonds %>% 
   na.omit() %>% 
-  sample_n(1000)
+  sample_n(1001)
 
 
 p1 <- ggplot(d, aes(x = carat, y = price)) +
@@ -114,6 +116,17 @@ grid.arrange(p1, p2, nrow = 1)
 ```
 
 ---
+
+## Prozess der Datenanalyse
+
+```{r, echo = FALSE, eval = TRUE}
+include_graphics("https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true")
+```
+
+Quelle: [https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true](https://github.com/rstudio/RStartHere/blob/master/data-science.png?raw=true)
+
+---
+
 
 
 ## Big Data?
@@ -450,7 +463,8 @@ head(mtcars) %>%
 
 ## Gruppieren plus zusammenfassen mit summarise()
 
-`mtcars_by_cyl = group_by(mtcars, cyl)`
+`mtcars_by_cyl = group_by(mtcars, cyl);`
+
 `summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 
 *** =left
