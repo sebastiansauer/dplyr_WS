@@ -32,17 +32,9 @@ em {
 ```{r startup, echo = FALSE,  message = FALSE, warning = FALSE, cache = FALSE}
 library(knitr)
 library(ggplot2)
-suppressPackageStartupMessages(library(plotly))
 suppressMessages(library(dplyr))
 suppressMessages(library(gridExtra))
 library(nycflights13)
-suppressPackageStartupMessages(library(pander))
-suppressMessages(library(ggvis))
-suppressMessages(library(rCharts))
-library(rCharts)
-suppressPackageStartupMessages(library(googleVis))
-suppressPackageStartupMessages(library(xtable))
-suppressPackageStartupMessages(library(plotly))
 
 ```
 
