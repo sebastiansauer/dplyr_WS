@@ -175,7 +175,7 @@ data(flights)  # lädt Datensatz
 
 - Ein Datensatz zu technischen Merkmalen von Autos aus der US-Zeitschrift *Motor Trends*.
 
-- Wir benutzen als "Spielzeug-Datensatz" (XXS-Data)
+- Wir benutzen den Datensatz als "Spielzeug-Datensatz" (XXS-Data).
 
 - Der Datensatz ist in R schon enthalten.
 
