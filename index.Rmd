@@ -81,38 +81,7 @@ kable(tools)
 
 options(warn = -1)
 
-data(diamonds, package = "ggplot2")
-d <- diamonds %>% 
-  na.omit() %>% 
-  sample_n(1001)
-
-
-p1 <- ggplot(d, aes(x = carat, y = price)) +
-  facet_wrap(~cut, ncol = 1, scales = "free") +
-  geom_point(alpha = .3, size = 1) +
-  geom_smooth(aes(colour = cut, fill = cut)) +
-  ylim(c(0, 20000)) +
-  theme(legend.position = "none")
-
-
-d_sum <-
-  d %>%
-  select(cut, price, color) %>%
-  group_by(cut) %>%
-  summarise(xintercept = mean(price))
-
-
-p2 <- ggplot(d, aes(x = price, fill = cut, color = cut)) +
-  geom_histogram() +
-  facet_wrap(~cut, ncol = 1, scales = "free") +
-  geom_vline(data = d_sum, aes(xintercept = xintercept)) +
-  geom_text(data = d_sum, aes(label = trunc(xintercept), x = xintercept+1000),
-            y = 6000, hjust = 0) +
-  theme(legend.position = "false") +
-  scale_x_continuous(breaks = c(0, 5000, 1000))
-
-grid.arrange(p1, p2, nrow = 1)
-
+knitr::include_graphics("diamonds.pdf")
 ```
 
 ---

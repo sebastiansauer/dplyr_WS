@@ -71,7 +71,7 @@ em {
 
 ## R: Die neuesten Tools, elegante Diagramme
 
-<img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" />
+<img src="diamonds.pdf" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" />
 
 ---
 
