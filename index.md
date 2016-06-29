@@ -570,7 +570,7 @@ f2 <- group_by(flights, carrier)
 f3 <- mutate(f2, delay = dep_delay - arr_delay)
 f4 <- filter(f3, !is.na(delay))
 f5 <- summarise(f4, delay_min = mean(delay))
-arrange(f5, delay_min)
+arrange(f5, delay_min) 
 ```
 
 ---
@@ -589,7 +589,7 @@ flights,
 date, hour ),
     delay = mean(dep_delay),
 n = n() ),
-n > 10 )
+n > 10 ) 
 ```
 
 ---
@@ -605,7 +605,7 @@ hourly_delay <- flights %>%
   filter(!is.na(dep_delay)) %>%
   group_by(date, hour) %>%
   summarise(delay = mean(dep_delay), n = n()) %>%
-  filter(n > 10)
+  filter(n > 10) 
 ```
 
 - Tipp: `%>%` kann man lesen als "*und dann*"
@@ -631,7 +631,7 @@ flights %>%
   summarise(delay_mean = mean(delay, na.rm = TRUE)) %>%
   filter(delay_mean < quantile(delay_mean, .1)) %>%
   # oder: filter(ntile(delay_mean, 10) == 1) %>%
-  arrange(delay_mean)
+  arrange(delay_mean) 
 ```
 Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
 
@@ -653,7 +653,7 @@ f2 <- flights %>%
    na.omit() %>% mutate(delay = dep_delay - arr_delay) 
 
   qplot(data = f2, x = delay,
-        main = paste("Delays [min]: Min: ", min(f2$delay),
+        main = paste("Delays [min]; Min: ", min(f2$delay),
                      "; Max: ", max(f2$delay),
                      "; Md: ", median(f2$delay), sep = ""))
 ```

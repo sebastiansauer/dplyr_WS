@@ -1341,7 +1341,7 @@ summarise(f3, delay_max = max(delay, na.rm = T))
 f3 &lt;- mutate(f2, delay = dep_delay - arr_delay)
 f4 &lt;- filter(f3, !is.na(delay))
 f5 &lt;- summarise(f4, delay_min = mean(delay))
-arrange(f5, delay_min)
+arrange(f5, delay_min) 
 </code></pre>
 
   </article>
@@ -1363,7 +1363,7 @@ flights,
 date, hour ),
     delay = mean(dep_delay),
 n = n() ),
-n &gt; 10 )
+n &gt; 10 ) 
 </code></pre>
 
   </article>
@@ -1384,7 +1384,7 @@ n &gt; 10 )
   filter(!is.na(dep_delay)) %&gt;%
   group_by(date, hour) %&gt;%
   summarise(delay = mean(dep_delay), n = n()) %&gt;%
-  filter(n &gt; 10)
+  filter(n &gt; 10) 
 </code></pre>
 
 <ul>
@@ -1422,7 +1422,7 @@ n &gt; 10 )
   summarise(delay_mean = mean(delay, na.rm = TRUE)) %&gt;%
   filter(delay_mean &lt; quantile(delay_mean, .1)) %&gt;%
   # oder: filter(ntile(delay_mean, 10) == 1) %&gt;%
-  arrange(delay_mean)
+  arrange(delay_mean) 
 </code></pre>
 
 <p>Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (&gt; 1 Stunde)!</p>
@@ -1447,7 +1447,7 @@ n &gt; 10 )
    na.omit() %&gt;% mutate(delay = dep_delay - arr_delay) 
 
   qplot(data = f2, x = delay,
-        main = paste(&quot;Delays [min]: Min: &quot;, min(f2$delay),
+        main = paste(&quot;Delays [min]; Min: &quot;, min(f2$delay),
                      &quot;; Max: &quot;, max(f2$delay),
                      &quot;; Md: &quot;, median(f2$delay), sep = &quot;&quot;))
 </code></pre>
