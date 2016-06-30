@@ -252,15 +252,15 @@ Identifizieren Sie folgende Flüge:
 
 
 ```r
-filter(flights, origin == "JFK")
+filter(flights, origin == "JFK", dest == "PWM")  #1
 
-filter(flights, origin == "JFK" & month == 1)
+filter(flights, origin == "JFK", month == 1, dest == "PWM")  #2
 
-filter(flights, origin == "JFK" & month == 1 & dep_time < 500 & dest == "PWM" )
+filter(flights, origin == "JFK", month == 1, dest == "PWM", dep_delay >= 60)  #3
 
-filter(flights, origin == "JFK" & month == 1 & dep_time > 500 & dest == "PWM" )
+filter(flights, origin == "JFK" & month == 1, dest == "PWM", dep_time < 500)  #4
 
-filter(flights, origin == "JFK" & arr_delay > 2 * dep_delay & month == 1, dest == "ATL")
+filter(flights, origin == "JFK", arr_delay > 2 * dep_delay, month == 1, dest == "ATL")  #5
 ```
 
 --- &twocol
@@ -409,13 +409,13 @@ Zeilen **absteigend** sortiert nach `cyl`:
 
 
 ```r
-arrange(flights, month, day, sched_dep_time)
+arrange(flights, month, day, sched_dep_time)  #1
 
-flights2 <- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
+flights2 <- select(flights, dep_delay, arr_delay, tailnum, flight, dest)  
 
-arrange(flights2, desc(dep_delay))
+arrange(flights2, desc(dep_delay))  #2
 
-arrange(flights2, desc(dep_delay - arr_delay))
+arrange(flights2, desc(dep_delay - arr_delay))  #3
 ```
 
 --- &twocol
@@ -463,9 +463,14 @@ Neue Spalte `wt_per_ps`: Gewicht (`wt`) pro PS (`hp`):
 
 
 ```r
-mutate(flights, speed = distance / air_time)
+# 1. Berechnen Sie die Geschwindigkeit (mph) jedes Fluges. Welche Flüge flogen am schnellsten?
+mutate(flights, speed = distance / air_time)  
 arrange(flights, speed)
+
+# 2. Erzeugen Sie eine neue Variable, die angibt, wieviel Zeit ein Flug verloren oder aufgeholt hat.
 mutate(flights, delay = dep_delay - arr_delay)
+
+# 3. Berechnen Sie die Flugdistanz in km.
 mutate(flights, dist_km = distance / 1.6)
 ```
 
@@ -583,12 +588,11 @@ hourly_delay <- filter(
   summarise(
     group_by(
       filter(
-flights,
-        !is.na(dep_delay)
-      ),
-date, hour ),
+             flights, !is.na(dep_delay)
+            ),
+      day, hour),
     delay = mean(dep_delay),
-n = n() ),
+  n = n() ),
 n > 10 ) 
 ```
 
@@ -601,9 +605,9 @@ n > 10 )
 
 
 ```r
-hourly_delay <- flights %>%
+flights %>%
   filter(!is.na(dep_delay)) %>%
-  group_by(date, hour) %>%
+  group_by(day, hour) %>%
   summarise(delay = mean(dep_delay), n = n()) %>%
   filter(n > 10) 
 ```
@@ -629,8 +633,8 @@ flights %>%
   group_by(carrier) %>% na.omit() %>%
   mutate(delay = dep_delay - arr_delay) %>%
   summarise(delay_mean = mean(delay, na.rm = TRUE)) %>%
-  filter(delay_mean < quantile(delay_mean, .1)) %>%
-  # oder: filter(ntile(delay_mean, 10) == 1) %>%
+  mutate(delay_mean_decile = ntile(delay_mean, 10)) %>% 
+  filter(delay_mean_decile == 1) %>%   # vgl. == 10
   arrange(delay_mean) 
 ```
 Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (> 1 Stunde)!
@@ -653,8 +657,7 @@ f2 <- flights %>%
    na.omit() %>% mutate(delay = dep_delay - arr_delay) 
 
   qplot(data = f2, x = delay,
-        main = paste("Delays [min]; Min: ", min(f2$delay),
-                     "; Max: ", max(f2$delay),
+        main = paste("Delays [min]; Min: ", min(f2$delay), "; Max: ", max(f2$delay),
                      "; Md: ", median(f2$delay), sep = ""))
 ```
 
@@ -671,7 +674,7 @@ f2 <- flights %>%
 ```r
 flights %>%
   mutate(delay = dep_delay - arr_delay) %>%
-  na.omit() %>% qplot(x = distance, y = delay, data = .) 
+  na.omit() %>% qplot(x = distance, y = delay, data = ., geom = c("point", "smooth")) 
 ```
 
 <img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
@@ -704,7 +707,7 @@ flights %>%
 - Danke an Hadley Wickham für `dplyr`, `ggplot2` und das Hadleyverse
 - Dieser Kurs basiert auf [diesem](https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a) Tutorial 
 von Hadley Wickham
-- Kontakt: Sebastian Sauer, sebastian.sauer-AT-fom.de
+- Kontakt: [Sebastian Sauer](sebastian.sauer@fom.de)
 - Die Folien (inkl. Syntax) findet sich [hier](https://github.com/sebastiansauer/dplyr_WS)
 
 
