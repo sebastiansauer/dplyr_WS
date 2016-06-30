@@ -179,6 +179,8 @@ Sehen Sie sich die Hilfe zu dem Datensatz an:
 
 ## Zeilen filtern mit filter()
 
+Hilfe zu [Logik-Operatoren](http://www.statmethods.net/management/operators.html)
+
 *** =left
 Auszug aus `mtcars`:
 ```{r, echo = FALSE}
@@ -317,7 +319,7 @@ head(mtcars) %>% select(mpg, cyl, hp) %>%  arrange(cyl, hp) %>% kable
 
 ## Zeilen absteigend sortieren mit arrange(desc())
 
-`select(mtcars, arrange(desc(cyl)))` ("descending": engl. für absteigend)
+`arrange(mtcars, desc(cyl))` ("descending": engl. für absteigend)
 
 
 *** =left 
@@ -429,7 +431,7 @@ head(mtcars) %>%
 
 ## Gruppieren plus zusammenfassen mit summarise()
 
-`mtcars_by_cyl = group_by(mtcars, cyl);`
+`mtcars_by_cyl = group_by(mtcars, cyl)`
 
 `summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 

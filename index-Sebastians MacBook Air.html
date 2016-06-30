@@ -309,7 +309,8 @@ data(flights)  # lädt Datensatz
     <h2>Zeilen filtern mit filter()</h2>
   </hgroup>
   <article data-timings="">
-    
+    <p>Hilfe zu <a href="http://www.statmethods.net/management/operators.html">Logik-Operatoren</a></p>
+
 <div style='float:left;width:48%;' class='centered'>
   <p>Auszug aus <code>mtcars</code>:</p>
 
@@ -781,7 +782,7 @@ select(flights, one_of(auswahl))
     <h2>Zeilen absteigend sortieren mit arrange(desc())</h2>
   </hgroup>
   <article data-timings="">
-    <p><code>select(mtcars, arrange(desc(cyl)))</code> (&quot;descending&quot;: engl. für absteigend)</p>
+    <p><code>arrange(mtcars, desc(cyl))</code> (&quot;descending&quot;: engl. für absteigend)</p>
 
 <div style='float:left;width:48%;' class='centered'>
   <p>Auszug aus <code>mtcars</code>:</p>
@@ -1196,7 +1197,7 @@ mutate(flights, dist_km = distance / 1.6)
     <h2>Gruppieren plus zusammenfassen mit summarise()</h2>
   </hgroup>
   <article data-timings="">
-    <p><code>mtcars_by_cyl = group_by(mtcars, cyl);</code></p>
+    <p><code>mtcars_by_cyl = group_by(mtcars, cyl)</code></p>
 
 <p><code>summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))</code></p>
 

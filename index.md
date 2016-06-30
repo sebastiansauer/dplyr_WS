@@ -191,6 +191,8 @@ Sehen Sie sich die Hilfe zu dem Datensatz an:
 
 ## Zeilen filtern mit filter()
 
+Hilfe zu [Logik-Operatoren](http://www.statmethods.net/management/operators.html)
+
 *** =left
 Auszug aus `mtcars`:
 
@@ -365,7 +367,7 @@ Zeilen *aufsteigend* sortiert nach `cyl` und nach `hp`:
 
 ## Zeilen absteigend sortieren mit arrange(desc())
 
-`select(mtcars, arrange(desc(cyl)))` ("descending": engl. für absteigend)
+`arrange(mtcars, desc(cyl))` ("descending": engl. für absteigend)
 
 
 *** =left 
@@ -505,7 +507,7 @@ Zusammenfassung der Spalte `hp` in einen einzigen Wert (Mittelwert):
 
 ## Gruppieren plus zusammenfassen mit summarise()
 
-`mtcars_by_cyl = group_by(mtcars, cyl);`
+`mtcars_by_cyl = group_by(mtcars, cyl)`
 
 `summarise(mtcars_by_cyl, p_cyl_mean = mean(hp, na.rm = TRUE))`
 
