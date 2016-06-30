@@ -159,7 +159,7 @@ em {
     <h2>R: Die neuesten Tools, elegante Diagramme</h2>
   </hgroup>
   <article data-timings="">
-    <p><img src="diamonds.pdf" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" /></p>
+    <p><img src="assets/fig/fig_diamonds-1.png" title="plot of chunk fig_diamonds" alt="plot of chunk fig_diamonds" width="900" height="500" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -291,7 +291,7 @@ data(flights)  # lädt Datensatz
   <article data-timings="">
     <ul>
 <li><p>Ein Datensatz zu technischen Merkmalen von Autos aus der US-Zeitschrift <em>Motor Trends</em>.</p></li>
-<li><p>Wir benutzen den Datensatz als &quot;Spielzeug-Datensatz&quot; (XXS-Data).</p></li>
+<li><p>Wir benutzen als &quot;Spielzeug-Datensatz&quot; (XXS-Data)</p></li>
 <li><p>Der Datensatz ist in R schon enthalten.</p></li>
 </ul>
 
@@ -466,15 +466,15 @@ filter(mtcars, hp &gt; 300 &amp; cyl == 8)
     <h2>Lösungsideen</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">filter(flights, origin == &quot;JFK&quot;, dest == &quot;PWM&quot;)  #1
+    <pre><code class="r">filter(flights, origin == &quot;JFK&quot;)
 
-filter(flights, origin == &quot;JFK&quot;, month == 1, dest == &quot;PWM&quot;)  #2
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1)
 
-filter(flights, origin == &quot;JFK&quot;, month == 1, dest == &quot;PWM&quot;, dep_delay &gt;= 60)  #3
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1 &amp; dep_time &lt; 500 &amp; dest == &quot;PWM&quot; )
 
-filter(flights, origin == &quot;JFK&quot; &amp; month == 1, dest == &quot;PWM&quot;, dep_time &lt; 500)  #4
+filter(flights, origin == &quot;JFK&quot; &amp; month == 1 &amp; dep_time &gt; 500 &amp; dest == &quot;PWM&quot; )
 
-filter(flights, origin == &quot;JFK&quot;, arr_delay &gt; 2 * dep_delay, month == 1, dest == &quot;ATL&quot;)  #5
+filter(flights, origin == &quot;JFK&quot; &amp; arr_delay &gt; 2 * dep_delay &amp; month == 1, dest == &quot;ATL&quot;)
 </code></pre>
 
   </article>
@@ -922,13 +922,13 @@ select(flights, one_of(auswahl))
     <h2>Lösungsideen</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">arrange(flights, month, day, sched_dep_time)  #1
+    <pre><code class="r">arrange(flights, month, day, sched_dep_time)
 
-flights2 &lt;- select(flights, dep_delay, arr_delay, tailnum, flight, dest)  
+flights2 &lt;- select(flights, dep_delay, arr_delay, tailnum, flight, dest)
 
-arrange(flights2, desc(dep_delay))  #2
+arrange(flights2, desc(dep_delay))
 
-arrange(flights2, desc(dep_delay - arr_delay))  #3
+arrange(flights2, desc(dep_delay - arr_delay))
 </code></pre>
 
   </article>
@@ -1101,14 +1101,9 @@ arrange(flights2, desc(dep_delay - arr_delay))  #3
     <h2>Lösungsideen</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r"># 1. Berechnen Sie die Geschwindigkeit (mph) jedes Fluges. Welche Flüge flogen am schnellsten?
-mutate(flights, speed = distance / air_time)  
+    <pre><code class="r">mutate(flights, speed = distance / air_time)
 arrange(flights, speed)
-
-# 2. Erzeugen Sie eine neue Variable, die angibt, wieviel Zeit ein Flug verloren oder aufgeholt hat.
 mutate(flights, delay = dep_delay - arr_delay)
-
-# 3. Berechnen Sie die Flugdistanz in km.
 mutate(flights, dist_km = distance / 1.6)
 </code></pre>
 
@@ -1346,7 +1341,7 @@ summarise(f3, delay_max = max(delay, na.rm = T))
 f3 &lt;- mutate(f2, delay = dep_delay - arr_delay)
 f4 &lt;- filter(f3, !is.na(delay))
 f5 &lt;- summarise(f4, delay_min = mean(delay))
-arrange(f5, delay_min) 
+arrange(f5, delay_min)
 </code></pre>
 
   </article>
@@ -1362,12 +1357,13 @@ arrange(f5, delay_min)
   summarise(
     group_by(
       filter(
-             flights, !is.na(dep_delay)
-            ),
-      day, hour),
+flights,
+        !is.na(dep_delay)
+      ),
+date, hour ),
     delay = mean(dep_delay),
-  n = n() ),
-n &gt; 10 ) 
+n = n() ),
+n &gt; 10 )
 </code></pre>
 
   </article>
@@ -1384,11 +1380,11 @@ n &gt; 10 )
 <li><code>x %&gt;% f(y)</code> ist dasselbe wie <code>f(x, y)</code></li>
 </ul>
 
-<pre><code class="r">flights %&gt;%
+<pre><code class="r">hourly_delay &lt;- flights %&gt;%
   filter(!is.na(dep_delay)) %&gt;%
-  group_by(day, hour) %&gt;%
+  group_by(date, hour) %&gt;%
   summarise(delay = mean(dep_delay), n = n()) %&gt;%
-  filter(n &gt; 10) 
+  filter(n &gt; 10)
 </code></pre>
 
 <ul>
@@ -1424,9 +1420,9 @@ n &gt; 10 )
   group_by(carrier) %&gt;% na.omit() %&gt;%
   mutate(delay = dep_delay - arr_delay) %&gt;%
   summarise(delay_mean = mean(delay, na.rm = TRUE)) %&gt;%
-  mutate(delay_mean_decile = ntile(delay_mean, 10)) %&gt;% 
-  filter(delay_mean_decile == 1) %&gt;%   # vgl. == 10
-  arrange(delay_mean) 
+  filter(delay_mean &lt; quantile(delay_mean, .1)) %&gt;%
+  # oder: filter(ntile(delay_mean, 10) == 1) %&gt;%
+  arrange(delay_mean)
 </code></pre>
 
 <p>Berechnen Sie die mittlere Verspätung aller Flüge mit deutlicher Verspätung (&gt; 1 Stunde)!</p>
@@ -1451,7 +1447,8 @@ n &gt; 10 )
    na.omit() %&gt;% mutate(delay = dep_delay - arr_delay) 
 
   qplot(data = f2, x = delay,
-        main = paste(&quot;Delays [min]; Min: &quot;, min(f2$delay), &quot;; Max: &quot;, max(f2$delay),
+        main = paste(&quot;Delays [min]: Min: &quot;, min(f2$delay),
+                     &quot;; Max: &quot;, max(f2$delay),
                      &quot;; Md: &quot;, median(f2$delay), sep = &quot;&quot;))
 </code></pre>
 
@@ -1468,7 +1465,7 @@ n &gt; 10 )
   <article data-timings="">
     <pre><code class="r">flights %&gt;%
   mutate(delay = dep_delay - arr_delay) %&gt;%
-  na.omit() %&gt;% qplot(x = distance, y = delay, data = ., geom = c(&quot;point&quot;, &quot;smooth&quot;)) 
+  na.omit() %&gt;% qplot(x = distance, y = delay, data = .) 
 </code></pre>
 
 <p><img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" /></p>
@@ -1504,7 +1501,7 @@ n &gt; 10 )
 <li>Danke an Hadley Wickham für <code>dplyr</code>, <code>ggplot2</code> und das Hadleyverse</li>
 <li>Dieser Kurs basiert auf <a href="https://www.dropbox.com/sh/i8qnluwmuieicxc/AAAgt9tIKoIm7WZKIyK25lh6a">diesem</a> Tutorial 
 von Hadley Wickham</li>
-<li>Kontakt: <a href="sebastian.sauer@fom.de">Sebastian Sauer</a></li>
+<li>Kontakt: Sebastian Sauer, sebastian.sauer-AT-fom.de</li>
 <li>Die Folien (inkl. Syntax) findet sich <a href="https://github.com/sebastiansauer/dplyr_WS">hier</a></li>
 </ul>
 
